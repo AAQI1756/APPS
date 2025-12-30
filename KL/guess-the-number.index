@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Kids Number Game</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- START POPUP -->
+<div class="overlay" id="startPopup">
+  <div class="popup">
+    <h2>🎮 Choose Level</h2>
+
+    <button onclick="startGame(1,10,10)">1 – 10</button>
+    <button onclick="startGame(1,20,10)">1 – 20</button>
+    <button onclick="startGame(1,30,10)">1 – 30</button>
+    <button onclick="startGame(1,50,10)">1 – 50</button>
+    <button onclick="startGame(1,60,10)">1 – 60</button>
+    <button onclick="startGame(1,70,10)">1 – 70</button>
+    <button onclick="startGame(1,80,10)">1 – 80</button>
+    <button onclick="startGame(1,90,10)">1 – 90</button>
+    <button onclick="startGame(1,100,10)">1 – 100</button>
+
+    <hr>
+
+    <button onclick="customRange(1,50)">1 – 50 (Custom)</button>
+    <button onclick="customRange(51,100)">51 – 100 (Custom)</button>
+  </div>
+</div>
+
+<!-- QUESTION COUNTER -->
+<div class="counter" id="counter">1 / 10</div>
+
+<div class="game-container">
+  <div class="mascot" id="mascot">🐻</div>
+  <div class="number-box" id="numberBox">1</div>
+  <div class="options" id="optionsBox"></div>
+</div>
+
+<!-- RESULT POPUP -->
+<div class="overlay" id="resultPopup">
+  <div class="popup">
+    <button class="close-btn" onclick="closeTest()">✖</button>
+    <h1 id="emoji"></h1>
+    <p id="scoreText"></p>
+    <button onclick="restartGame()">Play Again</button>
+  </div>
+</div>
+
+<!-- Sounds -->
+<audio id="correctSound" src="https://assets.mixkit.co/sfx/preview/mixkit-correct-answer-tone-2870.mp3"></audio>
+<audio id="wrongSound" src="https://assets.mixkit.co/sfx/preview/mixkit-wrong-answer-fail-notification-946.mp3"></audio>
+<audio id="winSound" src="https://assets.mixkit.co/sfx/preview/mixkit-animated-small-group-applause-523.mp3"></audio>
+
+<script src="script.js"></script>
+</body>
+</html>
