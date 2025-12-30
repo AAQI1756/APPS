@@ -2,7 +2,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Comic Sans MS', cursive;
+  font-family: "Comic Sans MS", cursive;
 }
 
 body {
@@ -11,6 +11,19 @@ body {
   justify-content: center;
   align-items: center;
   transition: background 0.8s ease;
+}
+
+/* Game */
+.game-container {
+  width: 100%;
+  max-width: 400px;
+  height: 95vh;
+  background: white;
+  border-radius: 20px;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 /* Counter */
@@ -23,18 +36,6 @@ body {
   padding: 6px 12px;
   border-radius: 15px;
   font-size: 14px;
-}
-
-.game-container {
-  width: 100%;
-  max-width: 400px;
-  height: 95vh;
-  background: white;
-  border-radius: 20px;
-  padding: 15px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
 }
 
 /* Mascot */
@@ -55,23 +56,17 @@ body {
   background: #4facfe;
   border-radius: 15px;
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
   font-size: 80px;
   color: white;
-  animation: pop 0.5s ease;
-}
-
-@keyframes pop {
-  from { transform: scale(0.6); }
-  to { transform: scale(1); }
 }
 
 /* Options */
 .options {
   flex: 1;
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(2,1fr);
   gap: 12px;
   margin-top: 15px;
 }
@@ -91,41 +86,56 @@ body {
   background: #ffb703;
 }
 
-.correct {
-  background: #4caf50 !important;
-  color: white;
+.correct { background: #4caf50 !important; color: white; }
+.wrong { background: #f44336 !important; color: white; }
+
+/* Popup */
+.overlay {
+  position: fixed;
+  inset: 0;
+  backdrop-filter: blur(6px);
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
 }
 
-.wrong {
-  background: #f44336 !important;
-  color: white;
-}
-
-/* Result */
-.result {
-  display: none;
-  text-align: center;
-  animation: fadeIn 1s ease;
-}
-
-.result h2 {
-  font-size: 60px;
-}
-
-.result p {
-  font-size: 22px;
-  margin: 15px 0;
-}
-
-.result button {
-  padding: 12px 25px;
-  font-size: 18px;
-  border: none;
+.popup {
+  background: white;
+  padding: 20px;
   border-radius: 20px;
+  text-align: center;
+  width: 90%;
+  max-width: 330px;
+  position: relative;
+}
+
+.popup button {
+  width: 100%;
+  margin-top: 10px;
+  padding: 12px;
+  border: none;
+  border-radius: 15px;
   background: #4facfe;
   color: white;
+  font-size: 18px;
   cursor: pointer;
 }
+
+.close-btn {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  background: red;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  font-size: 16px;
+  color: white;
+}
+
+#resultPopup { display: none; }
 
 /* Confetti */
 .confetti {
