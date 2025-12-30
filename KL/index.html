@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Learning Menu</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+  body{
+    margin:0;
+    font-family:system-ui, sans-serif;
+    background:#f4f6f8;
+    color:#333;
+  }
+
+  .top-space{ height:40px; }
+
+  .header{
+    padding:0 20px 10px;
+    max-width:900px;
+    margin:auto;
+  }
+
+  .greeting{
+    font-size:20px;
+    font-weight:700;
+  }
+
+  .date{
+    font-size:14px;
+    opacity:.7;
+    margin-top:4px;
+  }
+
+  .quote{
+    margin-top:14px;
+    font-style:italic;
+    font-size:14px;
+    background:#fff;
+    padding:12px 14px;
+    border-radius:12px;
+    box-shadow:0 6px 16px rgba(0,0,0,.08);
+  }
+
+  .menu{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+    gap:16px;
+    padding:16px;
+    max-width:900px;
+    margin:auto;
+  }
+
+  a{ text-decoration:none; }
+
+  .item{
+    background:#fff;
+    border-radius:16px;
+    padding:22px 10px;
+    text-align:center;
+    box-shadow:0 8px 20px rgba(0,0,0,.08);
+    transition:.3s ease;
+    cursor:pointer;
+  }
+
+  .item:hover{
+    transform:translateY(-6px) scale(1.04);
+    box-shadow:0 16px 32px rgba(0,0,0,.15);
+  }
+
+  .item i{
+    font-size:36px;
+    margin-bottom:10px;
+    color:#4CAF50;
+    transition:.3s;
+  }
+
+  .item:hover i{
+    color:#ff5722;
+    transform:scale(1.2) rotate(10deg);
+  }
+
+  .item span{
+    display:block;
+    font-size:15px;
+    font-weight:600;
+  }
+
+  .footer-space{ height:80px; }
+</style>
+</head>
+<body>
+
+<div class="top-space"></div>
+
+<div class="header">
+  <div class="greeting" id="greeting"></div>
+  <div class="date" id="date"></div>
+  <div class="quote" id="quote"></div>
+</div>
+
+<div class="menu">
+  <a href="https://aaqi1756.github.io/APPS/KL/guess-the-number.html">
+    <div class="item"><i class="fa-solid fa-square-root-variable"></i><span>Math Learning</span></div>
+  </a>
+  <a href="https://aaqi1756.github.io/APPS/KL/guess-the-number.html">
+    <div class="item"><i class="fa-solid fa-language"></i><span>English Learning</span></div>
+  </a>
+  <a href="https://aaqi1756.github.io/APPS/KL/guess-the-number.html">
+    <div class="item"><i class="fa-solid fa-brain"></i><span>General Knowledge</span></div>
+  </a>
+  <a href="https://aaqi1756.github.io/APPS/KL/guess-the-number.html">
+    <div class="item"><i class="fa-solid fa-book-open"></i><span>Daily Practice</span></div>
+  </a>
+  <a href="https://aaqi1756.github.io/APPS/KL/guess-the-number.html">
+    <div class="item"><i class="fa-solid fa-mobile-screen-button"></i><span>More Apps</span></div>
+  </a>
+</div>
+
+<div class="footer-space"></div>
+
+<script>
+  const hour = new Date().getHours();
+  let greet = "Good Evening Dear";
+
+  if(hour < 12) greet = "Good Morning Dear";
+  else if(hour < 17) greet = "Good Afternoon Dear";
+
+  document.getElementById("greeting").innerText = greet;
+
+  document.getElementById("date").innerText =
+    new Date().toLocaleDateString(undefined,{
+      weekday:"long", year:"numeric", month:"long", day:"numeric"
+    });
+
+  const quotes = [
+    "Small steps every day lead to big success.",
+    "Learning never exhausts the mind.",
+    "Discipline beats motivation.",
+    "Your future is created by what you do today.",
+    "Knowledge is the best investment."
+  ];
+
+  document.getElementById("quote").innerText =
+    quotes[new Date().getDate() % quotes.length];
+</script>
+
+</body>
+</html>
