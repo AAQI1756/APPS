@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kids Learning More Apps</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+/* ---------- RESET ---------- */
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  font-family:system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  background:linear-gradient(180deg,#f4f6f8,#e9eef3);
+  color:#333;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+}
+
+/* ---------- PAGE WRAPPER ---------- */
+.page-wrapper{
+  padding:50px 20px 40px; /* TOP | SIDES | BOTTOM */
+  max-width:1100px;
+  margin:auto;
+  width:100%;
+}
+
+/* ---------- HEADER ---------- */
+.header{
+  text-align:center;
+  margin-bottom:30px;
+}
+
+.header h1{
+  font-size:28px;
+  margin:0;
+  font-weight:800;
+}
+
+.header p{
+  margin-top:10px;
+  font-size:14px;
+  opacity:.75;
+}
+
+/* ---------- GRID MENU ---------- */
+.menu{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+  gap:24px;
+  animation:fadeIn 1.1s ease;
+}
+
+a{
+  text-decoration:none;
+}
+
+/* ---------- CARD ---------- */
+.item{
+  background:#fff;
+  border-radius:22px;
+  padding:28px 14px;
+  text-align:center;
+  box-shadow:0 12px 28px rgba(0,0,0,.09);
+  transition:all .35s ease;
+  cursor:pointer;
+  position:relative;
+  overflow:hidden;
+}
+
+/* Gradient hover glow */
+.item::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(135deg,#4CAF50,#ff9800);
+  opacity:0;
+  transition:.35s;
+  z-index:0;
+}
+
+.item:hover::before{
+  opacity:.12;
+}
+
+.item:hover{
+  transform:translateY(-10px) scale(1.07);
+  box-shadow:0 22px 45px rgba(0,0,0,.18);
+}
+
+/* ---------- ICON ---------- */
+.item i{
+  font-size:40px;
+  margin-bottom:14px;
+  color:#4CAF50;
+  transition:.35s;
+  position:relative;
+  z-index:1;
+}
+
+.item:hover i{
+  color:#ff5722;
+  transform:scale(1.3) rotate(8deg);
+}
+
+/* ---------- TEXT ---------- */
+.item span{
+  display:block;
+  font-size:16px;
+  font-weight:700;
+  position:relative;
+  z-index:1;
+}
+
+/* ---------- FOOTER ---------- */
+footer{
+  margin-top:auto;
+  text-align:center;
+  font-size:13px;
+  padding:22px 10px 26px;
+  color:#666;
+}
+
+/* ---------- ANIMATIONS ---------- */
+@keyframes fadeIn{
+  from{opacity:0; transform:translateY(25px);}
+  to{opacity:1; transform:translateY(0);}
+}
+
+/* ---------- MOBILE ---------- */
+@media(max-width:480px){
+  .header h1{font-size:23px;}
+  .item{padding:24px 12px;}
+  .item i{font-size:36px;}
+}
+</style>
+</head>
+
+<body>
+
+<div class="page-wrapper">
+
+  <!-- HEADER -->
+  <div class="header">
+    <h1>🎮 Kids Learning Apps</h1>
+    <p>Fun • Learning • Practice</p>
+  </div>
+
+  <!-- MENU GRID -->
+  <div class="menu">
+
+    <a href="https://aaqi1756.github.io/APPS/KL/index.html">
+      <div class="item">
+        <i class="fa-solid fa-calculator"></i>
+        <span>Calculator</span>
+      </div>
+    </a>
+
+    <a href="https://aaqi1756.github.io/APPS/KL/index.html">
+      <div class="item">
+        <i class="fa-solid fa-dice"></i>
+        <span>Guess the Number</span>
+      </div>
+    </a>
+
+    <a href="https://aaqi1756.github.io/APPS/KL/index.html">
+      <div class="item">
+        <i class="fa-solid fa-apple-whole"></i>
+        <span>Fruits Names</span>
+      </div>
+    </a>
+
+    <a href="https://aaqi1756.github.io/APPS/KL/index.html">
+      <div class="item">
+        <i class="fa-solid fa-person"></i>
+        <span>Body Parts</span>
+      </div>
+    </a>
+
+    <a href="https://aaqi1756.github.io/APPS/KL/index.html">
+      <div class="item">
+        <i class="fa-solid fa-table"></i>
+        <span>Tables</span>
+      </div>
+    </a>
+
+    <a href="https://aaqi1756.github.io/APPS/KL/index.html">
+      <div class="item">
+        <i class="fa-solid fa-music"></i>
+        <span>Poems</span>
+      </div>
+    </a>
+
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+  All Rights Reserved © <span></span> AAQI Soft Solutions
+</footer>
+
+<script>
+  document.getElementById("year").innerText = new Date().getFullYear();
+</script>
+
+</body>
+</html>
