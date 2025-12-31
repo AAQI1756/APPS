@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alphabet Quiz App</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  font-family:system-ui,sans-serif;
+  background:linear-gradient(180deg,#e0f7fa,#fff);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  min-height:100vh;
+  flex-direction:column;
+  position:relative;
+}
+.app{
+  max-width:420px;
+  width:100%;
+  padding:20px;
+  text-align:center;
+  position:relative;
+}
+.music-toggle{
+  position:fixed;
+  top:10px;
+  right:10px;
+  font-size:28px;
+  cursor:pointer;
+  color:#4CAF50;
+  z-index:1000;
+}
+.alphabet{
+  font-size:80px;
+  font-weight:900;
+  margin-bottom:20px;
+  color:#4CAF50;
+  animation: bounce 1s infinite alternate;
+}
+.options{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:16px;
+  margin-bottom:20px;
+}
+.option{
+  background:#fff;
+  border-radius:20px;
+  padding:10px;
+  cursor:pointer;
+  box-shadow:0 10px 25px rgba(0,0,0,.1);
+  transition:.3s;
+  position:relative;
+  text-align:center;
+  animation: fadeInUp 0.6s ease;
+}
+.option:hover{
+  transform:scale(1.05) rotate(-3deg);
+  box-shadow:0 20px 35px rgba(0,0,0,.15);
+}
+.option img{
+  width:80px;
+  height:80px;
+  object-fit:contain;
+  margin-bottom:6px;
+}
+.correct{background:#c8f7c5;}
+.wrong{background:#f8c5c5;}
+.counter{
+  font-weight:700;
+  margin-bottom:20px;
+  font-size:18px;
+}
+.overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.4);
+  backdrop-filter:blur(6px);
+  display:none;
+  align-items:center;
+  justify-content:center;
+}
+.popup{
+  background:#fff;
+  padding:30px;
+  border-radius:20px;
+  text-align:center;
+  width:90%;
+  max-width:320px;
+  animation:pop 0.4s ease;
+}
+.popup h1{font-size:40px;}
+.popup p{margin:8px 0;font-weight:600;}
+.popup button{
+  margin-top:12px;
+  padding:10px 18px;
+  border:none;
+  border-radius:12px;
+  font-weight:700;
+  cursor:pointer;
+}
+.replay{background:#4CAF50;color:#fff;}
+.close{background:#f44336;color:#fff;}
+@keyframes pop{from{transform:scale(.7);opacity:0;}to{transform:scale(1);opacity:1;}}
+@keyframes bounce{from{transform:translateY(0);}to{transform:translateY(-15px);} }
+@keyframes fadeInUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);} }
+@media(max-width:480px){
+  .alphabet{font-size:60px;}
+  .option img{width:60px;height:60px;}
+}
+</style>
+</head>
+<body>
+
+<div class="app">
+  <div class="counter" id="counter">1 / 10</div>
+  <div class="alphabet" id="alphabet">A</div>
+  <div class="options" id="options"></div>
+</div>
+
+<div class="overlay" id="popup">
+  <div class="popup">
+    <h1 id="emoji">😊</h1>
+    <p id="resultText">Good Job!</p>
+    <p id="scoreText">Score: 100% | Right: 10 | Wrong: 0</p>
+    <button class="replay" onclick="startGame()">Replay</button>
+    <button class="close" onclick="closePopup()">Close</button>
+  </div>
+</div>
+
+<div class="music-toggle" id="musicToggle">🎵</div>
+
+<audio id="correctSound" src="https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg"></audio>
+<audio id="wrongSound" src="https://actions.google.com/sounds/v1/cartoon/boing.ogg"></audio>
+<audio id="bgMusic" src="https://actions.google.com/sounds/v1/ambiences/quiet_background.ogg" loop></audio>
+
+<script>
+const data = {
+A:["Apple","Airplane","Ant","Axe","Ambulance"],
+B:["Banana","Ball","Bear","Bus","Book"],
+C:["Cat","Car","Cupcake","Camera","Cake"],
+D:["Dog","Duck","Drum","Door","Donut"],
+E:["Elephant","Egg","Eagle","Envelope","Earth"],
+F:["Frog","Fish","Fan","Flower","Flag"],
+G:["Giraffe","Grapes","Globe","Gift","Goat"],
+H:["Horse","Hat","House","Heart","Hammer"],
+I:["Icecream","Igloo","Insect","Island","Ink"],
+J:["Jaguar","Jelly","Juice","Jar","Jeep"],
+K:["Kite","Koala","Key","King","Kangaroo"],
+L:["Lion","Leaf","Lamp","Lemon","Ladder"],
+M:["Monkey","Moon","Mango","Mouse","Map"],
+N:["Nest","Nail","Notebook","Nut","Needle"],
+O:["Owl","Orange","Octopus","Oven","Orbit"],
+P:["Penguin","Pineapple","Pen","Pumpkin","Parrot"],
+Q:["Queen","Quill","Quilt","Question","Quokka"],
+R:["Rabbit","Rainbow","Ring","Rocket","Robot"],
+S:["Snake","Sun","Star","Ship","Sock"],
+T:["Tiger","Tomato","Train","Table","Telescope"],
+U:["Umbrella","Unicorn","Urchin","Utensil","Uniform"],
+V:["Violin","Vase","Van","Volcano","Vest"],
+W:["Whale","Watermelon","Watch","Window","Wolf"],
+X:["Xylophone","X-ray","Xerox","Xmas"],
+Y:["Yak","Yacht","Yarn","Yo-yo","Yogurt"],
+Z:["Zebra","Zoo","Zipper","Zucchini","Zeppelin"]
+};
+
+let questions=[], index=0, correct=0;
+let musicPlaying=false;
+const correctSound = document.getElementById("correctSound");
+const wrongSound = document.getElementById("wrongSound");
+const bgMusic = document.getElementById("bgMusic");
+const musicToggle = document.getElementById("musicToggle");
+
+musicToggle.onclick = ()=>{
+  musicPlaying = !musicPlaying;
+  if(musicPlaying){ bgMusic.play(); musicToggle.textContent="🎵"; }
+  else { bgMusic.pause(); musicToggle.textContent="🚫"; }
+}
+
+function startGame(){
+  questions = Object.keys(data).sort(()=>Math.random()-0.5).slice(0,10);
+  index = 0; correct = 0;
+  document.getElementById("popup").style.display="none";
+  loadQuestion();
+}
+
+function loadQuestion(){
+  const letter = questions[index];
+  document.getElementById("alphabet").innerText = letter;
+  document.getElementById("counter").innerText = `${index+1} / 10`;
+
+  const items = [...data[letter]];
+  const answer = items.splice(Math.floor(Math.random()*items.length),1)[0];
+  let options = [answer];
+
+  while(options.length<4){
+    const l = Object.keys(data)[Math.floor(Math.random()*26)];
+    const i = data[l][Math.floor(Math.random()*data[l].length)];
+    if(!options.includes(i)) options.push(i);
+  }
+
+  options.sort(()=>Math.random()-0.5);
+  const box = document.getElementById("options");
+  box.innerHTML="";
+  options.forEach(o=>{
+    const div = document.createElement("div");
+    div.className="option";
+    div.innerHTML=`<div>${o}</div>`;
+    div.onclick=()=>check(o===answer,div);
+    box.appendChild(div);
+  });
+}
+
+function check(isCorrect,el){
+  document.querySelectorAll(".option").forEach(o=>o.onclick=null);
+  if(isCorrect){el.classList.add("correct"); correct++; correctSound.play();}
+  else{el.classList.add("wrong"); wrongSound.play();}
+  setTimeout(()=>{
+    index++;
+    index<10? loadQuestion() : showResult();
+  },700);
+}
+
+function showResult(){
+  const percent = Math.round((correct/10)*100);
+  let emoji="😊", msg="Good Job!";
+  if(percent>=80){emoji="🎉"; msg="Excellent!";}
+  else if(percent<40){emoji="😢"; msg="Keep Practicing!";}
+  document.getElementById("emoji").innerText = emoji;
+  document.getElementById("resultText").innerText = msg;
+  document.getElementById("scoreText").innerText = `Score: ${percent}% | Right: ${correct} | Wrong: ${10-correct}`;
+  document.getElementById("popup").style.display="flex";
+}
+
+function closePopup(){
+  window.location.href="https://aaqi1756.github.io/APPS/KL/index.html";
+}
+
+startGame();
+</script>
+
+</body>
+</html>
