@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About App – KLA</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+body{
+  margin:0;
+  font-family:system-ui, sans-serif;
+  background:linear-gradient(135deg,#f0f8ff,#f9fff2);
+}
+.container{
+  max-width:900px;
+  margin:auto;
+  padding:40px 20px 80px;
+}
+.card{
+  background:#fff;
+  border-radius:20px;
+  padding:30px;
+  box-shadow:0 20px 40px rgba(0,0,0,.12);
+  animation:fade 1s ease;
+}
+@keyframes fade{
+  from{opacity:0;transform:translateY(20px)}
+  to{opacity:1;transform:translateY(0)}
+}
+h1,h2{
+  color:#4CAF50;
+}
+p{
+  line-height:1.7;
+  font-size:15px;
+}
+.links{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:16px;
+  margin-top:20px;
+}
+.link-box{
+  background:#f5f7fa;
+  padding:16px;
+  border-radius:14px;
+  text-align:center;
+  transition:.3s;
+}
+.link-box:hover{
+  transform:translateY(-6px);
+  background:#e9fff1;
+  box-shadow:0 12px 24px rgba(0,0,0,.12);
+}
+.link-box i{
+  font-size:26px;
+  color:#ff5722;
+  margin-bottom:6px;
+}
+a{text-decoration:none;color:#333;}
+.footer{
+  text-align:center;
+  margin-top:30px;
+  font-size:14px;
+  opacity:.8;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="card">
+
+    <h1>About This App</h1>
+    <p>
+      This app is a kids learning, general knowledge, and fun-based educational application designed to help children learn in an easy, interactive, and enjoyable way. The app focuses on building basic skills, improving thinking ability, and encouraging curiosity through simple learning activities and playful content.
+    </p>
+    <p>
+      KLA (Kids Learning App) is created to support young learners by combining education with fun. Children can explore general knowledge topics, basic learning concepts, and engaging activities that keep them motivated and interested. The app is designed with a clean interface, friendly layout, and smooth navigation so kids can use it comfortably on mobile devices.
+    </p>
+    <p>
+      This app is suitable for kids who want to learn while playing, making education stress-free and enjoyable. The goal is to help children grow intellectually, improve confidence, and develop a love for learning from an early age in a safe and user-friendly environment.
+    </p>
+
+    <h2>About Developer & Company</h2>
+    <p>
+      This application is developed by <strong>Muhammad Asadullah</strong> under <strong>AAQI Soft Solutions</strong>.
+      AAQI Soft Solutions focuses on creating modern, user-friendly, and meaningful digital products including educational apps, web applications, and learning platforms.
+    </p>
+
+    <h2>Contact & Support</h2>
+    <div class="links">
+
+      <a href="https://wa.me/923488608474?text=Hello%20dear%20AAQI%20Soft%20Solutions%2C%20I%20saw%20your%20app%20KLA%20and%20I%20want%20assistance." target="_blank">
+        <div class="link-box">
+          <i class="fa-brands fa-whatsapp"></i>
+          <div>WhatsApp Support</div>
+        </div>
+      </a>
+
+      <a href="mailto:muhammadasadullah1756@gmail.com">
+        <div class="link-box">
+          <i class="fa-solid fa-envelope"></i>
+          <div>Email Us</div>
+        </div>
+      </a>
+
+      <a href="https://aaqi-soft-solutions.odoo.com/" target="_blank">
+        <div class="link-box">
+          <i class="fa-solid fa-globe"></i>
+          <div>Visit Website</div>
+        </div>
+      </a>
+
+    </div>
+
+    <div class="footer">
+      All Rights Reserved © AAQI Soft Solutions
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>
