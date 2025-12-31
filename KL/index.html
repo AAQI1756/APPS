@@ -6,6 +6,19 @@
 <title>Kids Learning APP KLA </title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <style>
+  #clock {
+  font-weight: 700;
+  color: #4CAF50;
+}
+
+#location {
+  font-size: 13px;
+  opacity: 0.8;
+}
+
+  
+  
+  
   body{
     margin:0;
     font-family:system-ui, sans-serif;
@@ -87,6 +100,22 @@
   }
 
   .footer-space{ height:80px; }
+  
+  .footer {
+  text-align: center;
+  font-size: 13px;
+  padding: 14px 10px 20px;
+  color: #666;
+  background: transparent;
+}
+
+.footer span {
+  font-weight: 600;
+}
+
+  
+  
+  
 </style>
 </head>
 <body>
@@ -95,8 +124,10 @@
 
 <div class="header">
   <div class="greeting" id="greeting"></div>
-  <div class="date" id="date"></div>
-  <div class="quote" id="quote"></div>
+<div class="date" id="dateTime"></div>
+<div class="quote" id="quote"></div>
+
+
 </div>
 
 <div class="menu">
@@ -124,21 +155,44 @@
 </div>
 
 <div class="footer-space"></div>
-
+  
+  
 <script>
-  const hour = new Date().getHours();
-  let greet = "Good Evening Dear";
+  // ---------- GREETING ----------
+  function updateGreeting() {
+    const hour = new Date().getHours();
+    let greet = "Good Evening Dear";
 
-  if(hour < 12) greet = "Good Morning Dear";
-  else if(hour < 17) greet = "Good Afternoon Dear";
+    if (hour < 12) greet = "Good Morning Dear";
+    else if (hour < 17) greet = "Good Afternoon Dear";
 
-  document.getElementById("greeting").innerText = greet;
+    document.getElementById("greeting").innerText = greet;
+  }
 
-  document.getElementById("date").innerText =
-    new Date().toLocaleDateString(undefined,{
-      weekday:"long", year:"numeric", month:"long", day:"numeric"
+  // ---------- DATE | TIME ----------
+  function updateDateTime() {
+    const now = new Date();
+
+    const date = now.toLocaleDateString(undefined, {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric"
     });
 
+    const time = now.toLocaleTimeString(undefined, {
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit"
+    });
+
+    document.getElementById("dateTime").innerText =
+      `${date} | ${time}`;
+  }
+
+  setInterval(updateDateTime, 1000);
+
+  // ---------- QUOTES ----------
   const quotes = [
     "Small steps every day lead to big success.",
   "Small steps every day lead to big success.",
@@ -344,6 +398,454 @@
 "You can solve any problem.",
 "Be patient and keep trying.",
 "Learning is your best tool.",
+"Honesty is the best policy.",
+"Kindness is never wasted.",
+"Patience makes everything possible.",
+"Respect everyone you meet.",
+"Dream big, act small.",
+"Hard work beats talent.",
+"Believe before you see.",
+"Good manners open doors.",
+"Gratitude makes life beautiful.",
+"Your word is your bond.",
+"Actions speak louder than words.",
+"Help others without expecting.",
+"Learn something new daily.",
+"Smile, it spreads happiness.",
+"Curiosity is the key to learning.",
+"Think before you speak.",
+"Be brave, even when scared.",
+"Forgive and move forward.",
+"Sharing makes hearts happy.",
+"Knowledge is power.",
+"Stay humble in success.",
+"Every challenge teaches wisdom.",
+"Listening is a great skill.",
+"Be patient with yourself.",
+"Good friends make life better.",
+"Respect nature and animals.",
+"Time is precious, use wisely.",
+"Truth always wins.",
+"Small steps lead to big results.",
+"Learn from your mistakes.",
+"Confidence comes from preparation.",
+"Be fair to everyone.",
+"Generosity makes you richer.",
+"Kind words heal hearts.",
+"Focus on solutions, not problems.",
+"Learning never ends.",
+"Be the change you want.",
+"Your thoughts shape your life.",
+"Help when you can.",
+"Stay positive in tough times.",
+"Self-control is true strength.",
+"Good deeds are never forgotten.",
+"Value honesty above everything.",
+"Respect is earned, not given.",
+"Curiosity leads to wisdom.",
+"Perseverance achieves dreams.",
+"Think big, start small.",
+"Be grateful for little things.",
+"Hard work brings rewards.",
+"Actions define character.",
+"Be kind even when ignored.",
+"Learning is a lifelong journey.",
+"Forgiveness frees the heart.",
+"Patience brings better results.",
+"Share knowledge to grow together.",
+"Bravery is doing what is right.",
+"Small efforts make big differences.",
+"Respect elders and teachers.",
+"Stay calm under pressure.",
+"Be honest even when difficult.",
+"Listening is better than speaking.",
+"Your habits shape your future.",
+"Kindness is contagious.",
+"Dreams need action to grow.",
+"Confidence starts with effort.",
+"Think before you act.",
+"Integrity is a treasure.",
+"Help without expecting thanks.",
+"Every day is a new chance.",
+"Stay humble and kind.",
+"Learn to value time.",
+"Knowledge lights the mind.",
+"Your choices define you.",
+"Bravery starts with small steps.",
+"Perseverance turns dreams real.",
+"Be mindful of your words.",
+"Patience is a hidden strength.",
+"Good intentions lead to success.",
+"Respect differences in others.",
+"Actions speak louder than words.",
+"Generosity makes life richer.",
+"Smile in the face of challenges.",
+"Curiosity fuels discovery.",
+"Learning from failure is wisdom.",
+"Stay focused on your goals.",
+"Honesty builds trust.",
+"Every effort counts.",
+"Be fair and just.",
+"Kindness opens hearts.",
+"Stay determined always.",
+"Knowledge grows with practice.",
+"Help others and inspire them.",
+"Confidence grows with action.",
+"Small steps change the world.",
+"Think positive, act positive.",
+"Be loyal to your values.",
+"Self-discipline leads to freedom.",
+"Be courageous in every task.",
+"Stay true to your promises.",
+"Patience creates possibilities.",
+"Hard work brings pride.",
+"Respect is a reflection of you.",
+"Your curiosity is your superpower.",
+"Kindness makes you unforgettable.",
+"Every question makes you smarter.",
+"Helping others is always rewarding.",
+"Dreams grow with effort.",
+"Stay brave even when unsure.",
+"Your smile can change the world.",
+"Learning makes you unstoppable.",
+"Be patient, great things take time.",
+"Small steps create big victories.",
+"Listen first, speak later.",
+"Your imagination has no limits.",
+"Sharing makes hearts stronger.",
+"Every mistake is a lesson.",
+"Believe in the magic of learning.",
+"Hard work builds confidence.",
+"Be a friend to everyone.",
+"Your ideas can make a difference.",
+"Be curious about everything.",
+"Practice makes you unstoppable.",
+"Every effort counts, no matter how small.",
+"Think of solutions, not problems.",
+"Respect everyone, even when they differ.",
+"Your kindness is your strength.",
+"Every challenge teaches courage.",
+"Stay positive and try again.",
+"Learning is the key to freedom.",
+"Use your talents to help others.",
+"Every day is a new opportunity.",
+"Bravery begins with trying.",
+"Your heart is full of possibilities.",
+"Be patient with yourself and others.",
+"Encourage friends to do their best.",
+"Honesty makes you shine.",
+"Your dreams are worth chasing.",
+"Stay curious and keep asking.",
+"Small efforts lead to big growth.",
+"Your imagination can change the future.",
+"Be gentle in your words.",
+"Every lesson builds wisdom.",
+"Helping someone is always valuable.",
+"Keep learning, even when it's hard.",
+"Stay kind, it’s powerful.",
+"Confidence grows with each try.",
+"Every day is a learning adventure.",
+"Be proud of your progress.",
+"Your actions inspire others.",
+"Dreams need courage to grow.",
+"Patience helps you achieve more.",
+"Your effort is never wasted.",
+"Be generous with your time.",
+"Learning creates endless possibilities.",
+"Think before you act.",
+"Your words have power, use them wisely.",
+"Stay humble in success.",
+"Every try brings improvement.",
+"Be curious, the world is full of wonders.",
+"Small wins are still wins.",
+"Your effort is your treasure.",
+"Help others without expecting rewards.",
+"Stay determined, never give up.",
+"Your creativity is endless.",
+"Learning from mistakes is smart.",
+"Be kind to the planet.",
+"Every step forward is progress.",
+"Your heart can solve problems.",
+"Patience makes challenges easier.",
+"Keep dreaming and acting.",
+"Your choices shape your future.",
+"Be courageous in learning.",
+"Every act of kindness matters.",
+"Stay focused on your goals.",
+"Your imagination makes life fun.",
+"Hard work brings rewards.",
+"Be honest in every situation.",
+"Learning is your secret weapon.",
+"Every challenge helps you grow.",
+"Your energy can inspire others.",
+"Practice makes great habits.",
+"Stay positive through difficulties.",
+"Your mind can create wonders.",
+"Help friends when they need it.",
+"Small efforts create big change.",
+"Be brave to stand for truth.",
+"Every day is a chance to shine.",
+"Your thoughts can change your world.",
+"Kindness grows stronger hearts.",
+"Learning never stops.",
+"Be patient with challenges.",
+"Your dreams need action to grow.",
+"Encourage others to try their best.",
+"Every mistake brings a lesson.",
+"Stay curious, always explore.",
+"Your words can inspire smiles.",
+"Be generous in thought and action.",
+"Learning builds your future.",
+"Your efforts shape your success.",
+"Be confident in your abilities.",
+"Every day brings new opportunities.",
+"Stay gentle even when frustrated.",
+"Your ideas can make a difference.",
+"Practice creates strong minds.",
+"Small acts of kindness matter.",
+"Be humble and grateful.",
+"Every try teaches something new.",
+"Your imagination can lead to greatness.",
+"Stay honest in all actions.",
+"Your dreams are achievable.",
+"Kindness always comes back to you.",
+"Learning makes you unstoppable.",
+"Every step counts toward your goal.",
+"Be brave to ask questions.",
+"Your actions define who you are.",
+"Small victories create confidence.",
+"Stay positive in every situation.",
+"Your effort is your superpower.",
+"Help others, and you'll grow.",
+"Curiosity opens new doors.",
+"Every challenge builds courage.",
+"Your kindness is your strength.",
+"Practice makes you better every day.",
+"Dream big and start small.",
+"Be patient, success takes time.",
+"Your words can change hearts.",
+"Stay true to your values.",
+"Every lesson helps you grow.",
+"Your imagination makes life exciting.",
+"Be generous and help freely.",
+"Hard work brings happiness.",
+"Every mistake is an opportunity.",
+"Stay curious and keep learning.",
+"Your ideas matter.",
+"Kindness makes life brighter.",
+"Learning helps you discover yourself.",
+"Every effort brings rewards.",
+"Be courageous in your choices.",
+"Your thoughts shape your world.",
+"Practice kindness every day.",
+"Stay determined to achieve goals.",
+"Your energy can brighten someone’s day.",
+"Small steps create big changes.",
+"Be humble in all achievements.",
+"Every try leads to improvement.",
+"Your heart is full of power.",
+"Curiosity makes life fun.",
+"Learning is your magic.",
+"Every act of goodness counts.",
+"Be brave to try new things.",
+"Your effort creates opportunities.",
+"Stay positive and kind.",
+"Your ideas can change the world.",
+"Small achievements lead to greatness.",
+"Be honest and fair.",
+"Every day is a learning day.",
+"Your creativity is limitless.",
+"Help friends whenever possible.",
+"Every challenge strengthens your mind.",
+"Stay focused on what matters.",
+"Your actions inspire others.",
+"Kindness makes you powerful.",
+"Learning helps you grow strong.",
+"Every step forward counts.",
+"Your dreams are worth chasing.",
+"Be gentle and understanding.",
+"Practice makes your skills shine.",
+"Every effort builds character.",
+"Your imagination can solve problems.",
+"Stay curious and brave.",
+"Be thankful for every lesson.",
+"Every choice shapes your future.",
+"Your words can heal hearts.",
+"Small habits create big results.",
+"Stay humble and confident.",
+"Learning brings endless opportunities.",
+"Your kindness spreads happiness.",
+"Every attempt makes you stronger.",
+"Be patient and keep moving.",
+"Your creativity brings joy.",
+"Practice makes learning fun.",
+"Every day is a new chance.",
+"Your dreams need effort to grow.",
+"Be generous with your talents.",
+"Every challenge is a stepping stone.",
+"Your actions matter.",
+"Stay positive and hopeful.",
+"Small steps lead to big achievements.",
+"Your imagination has no limits.",
+"Be brave in every endeavor.",
+"Every mistake teaches wisdom.",
+"Your curiosity fuels success.",
+"Help others with a happy heart.",
+"Every effort creates opportunities.",
+"Your kindness is your power.",
+"Learning helps you shine bright.",
+"Be honest in thoughts and actions.",
+"Every step builds confidence.",
+"Your dreams can come true.",
+"Stay determined and never quit.",
+"Small victories make you stronger.",
+"Your words can inspire change.",
+"Practice brings excellence.",
+"Every act of kindness counts.",
+"Your energy can achieve wonders.",
+"Be curious and keep exploring.",
+"Every challenge makes you smarter.",
+"Your efforts shape your destiny.",
+"Stay positive no matter what.",
+"Small actions create big results.",
+"Your imagination brings possibilities.",
+"Be gentle and loving.",
+"Every try is a success.",
+"Your thoughts can lead to greatness.",
+"Practice makes everything possible.",
+"Every day brings learning opportunities.",
+"Your kindness changes lives.",
+"Be brave to try again.",
+"Every effort moves you forward.",
+"Your creativity is valuable.",
+"Stay humble and keep growing.",
+"Small steps lead to success.",
+"Your heart can make a difference.",
+"Learning opens new doors.",
+"Every challenge teaches patience.",
+"Your words can inspire dreams.",
+"Be generous and help others.",
+"Every action creates a lesson.",
+"Your curiosity makes you wise.",
+"Stay confident and try again.",
+"Small achievements bring happiness.",
+"Your imagination can solve problems.",
+"Be positive and keep learning.",
+"Every day is a chance to improve.",
+"Your efforts create opportunities.",
+"Help friends whenever you can.",
+"Every mistake teaches resilience.",
+"Your actions define your character.",
+"Be courageous in every situation.",
+"Every step forward is progress.",
+"Your dreams can become reality.",
+"Stay kind and helpful.",
+"Small wins are important too.",
+"Your creativity can change the world.",
+"Practice patience every day.",
+"Every lesson builds strength.",
+"Your heart is full of love.",
+"Be honest and trustworthy.",
+"Every challenge strengthens you.",
+"Your curiosity leads to discovery.",
+"Stay focused on learning.",
+"Small efforts bring big change.",
+"Your words can encourage others.",
+"Be humble and grateful.",
+"Every try is a step forward.",
+"Your imagination can inspire greatness.",
+"Practice kindness and generosity.",
+"Every day is a new adventure.",
+"Your efforts make a difference.",
+"Stay positive and motivated.",
+"Small acts of goodness matter.",
+"Your creativity can make life better.",
+"Be brave, even when afraid.",
+"Every step teaches patience.",
+"Your kindness spreads happiness.",
+"Practice makes your dreams real.",
+"Every challenge is an opportunity.",
+"Your curiosity keeps you learning.",
+"Stay determined and hopeful.",
+"Small victories build confidence.",
+"Your actions inspire positivity.",
+"Be honest and fair always.",
+"Every effort counts.",
+"Your imagination makes life exciting.",
+"Practice helps you grow stronger.",
+"Every day brings a new lesson.",
+"Your words have power.",
+"Stay humble and kindhearted.",
+"Small steps lead to big dreams.",
+"Your kindness can change the world.",
+"Be brave to explore new paths.",
+"Every attempt teaches courage.",
+"Your creativity can solve problems.",
+"Practice patience and persistence.",
+"Every challenge is a learning opportunity.",
+"Your curiosity fuels success.",
+"Stay confident and keep trying.",
+"Small actions can create miracles.",
+"Your imagination can bring ideas to life.",
+"Be generous with your time and love.",
+"Every effort helps you grow.",
+"Your words can inspire others.",
+"Practice makes everything better.",
+"Every day is a chance to shine.",
+"Your kindness makes a difference.",
+"Stay positive and resilient.",
+"Small victories lead to greatness.",
+"Your creativity is a gift.",
+"Be honest in everything you do.",
+"Every challenge strengthens your heart.",
+"Your curiosity leads to knowledge.",
+"Practice makes your skills stronger.",
+"Every step forward is important.",
+"Your efforts will bring results.",
+"Stay brave and never quit.",
+"Small deeds create big impact.",
+"Your imagination is limitless.",
+"Be humble and stay grounded.",
+"Every lesson is a treasure.",
+"Your kindness spreads love.",
+"Practice patience in all things.",
+"Every attempt brings progress.",
+"Your dreams are worth chasing.",
+"Stay curious and keep learning.",
+"Small steps make big changes.",
+"Your creativity can inspire others.",
+"Be brave to take risks.",
+"Every effort counts in the end.",
+"Your actions can change lives.",
+"Practice makes confidence grow.",
+"Every day brings new opportunities.",
+"Your heart can do amazing things.",
+"Stay positive through challenges.",
+"Small achievements lead to big success.",
+"Your words can encourage friends.",
+"Be generous and thoughtful.",
+"Every challenge teaches strength.",
+"Your curiosity helps you explore.",
+"Practice makes dreams achievable.",
+"Every step forward counts.",
+"Your efforts make you stronger.",
+"Stay humble and kind-hearted.",
+"Small victories create big confidence.",
+"Your imagination can transform ideas.",
+"Be honest and fair in all things.",
+"Every effort builds your future.",
+"Your kindness can inspire others.",
+"Practice patience and persistence daily.",
+"Every mistake teaches resilience.",
+"Your curiosity is your guide.",
+"Stay confident and motivated.",
+"Small actions bring great results.",
+"Your creativity brings joy.",
+"Be brave to try new things.",
+"Every attempt brings learning.",
+"Your words can spread happiness.",
+"Practice makes you better every day.",
+"Every challenge is an opportunity to grow.",
 "You are becoming wiser.",
 "Practice builds strong skills.",
 "Learning helps you win.",
@@ -511,8 +1013,18 @@
 
  document.getElementById("quote").innerText =
   quotes[Math.floor(Math.random() * quotes.length)];
-
+  // ---------- INIT ----------
+  updateGreeting();
+  updateDateTime();
 </script>
-
-</body>
+  <div class="footer-space"></div>
+<footer class="footer">
+  All Rights Reserved © <span id="year"></span> AAQI Soft Solutions
+</footer>
 </html>
+
+
+
+
+
+
