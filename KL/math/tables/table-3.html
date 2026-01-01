@@ -167,7 +167,7 @@ h2{
 </div>
 
 <script>
-const table = 3;   // ✅ TABLE OF 3
+const table = 3;   // TABLE OF 3
 let questions = [];
 let current = 0;
 let correct = 0;
@@ -233,12 +233,13 @@ function replay(){
     current = correct = wrong = 0;
     generateQuestions();
     loadQuestion();
-    closePopup();
-}
-
-function closePopup(){
     document.getElementById("quizBox").classList.remove("blur");
     document.getElementById("popup").classList.remove("show");
+}
+
+/* ✅ REDIRECT ON CLOSE */
+function closePopup(){
+    window.location.href = "https://aaqi1756.github.io/APPS/KL/math/tables/tables.html";
 }
 
 generateQuestions();
