@@ -3,92 +3,109 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tables 2 to 20</title>
+<title>KLA Tables</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 <style>
+*{box-sizing:border-box}
 body{
-  font-family:system-ui, sans-serif;
-  background:#f4f6f8;
-  padding:20px;
-}
-
-/* Tabs */
-.tabs{
+  margin:0;
+  font-family:system-ui,sans-serif;
+  background:linear-gradient(180deg,#f4f6f8,#e9eef3);
+  min-height:100vh;
   display:flex;
-  flex-wrap:wrap;
-  gap:8px;
-  justify-content:center;
-  margin-bottom:20px;
+  flex-direction:column;
 }
-
-.tabs button{
-  border:none;
-  padding:10px 14px;
-  border-radius:12px;
-  background:#fff;
-  font-weight:700;
-  cursor:pointer;
-  box-shadow:0 6px 14px rgba(0,0,0,.1);
-}
-
-.tabs button.active{
-  background:#4CAF50;
-  color:#fff;
-}
-
-/* Table Box */
-.table-box{
-  max-width:400px;
+.page-wrapper{
+  padding:50px 20px 40px;
+  max-width:1100px;
   margin:auto;
+  width:100%;
+}
+.header{text-align:center;margin-bottom:30px}
+.header h1{font-size:28px;margin:0;font-weight:800}
+.header p{margin-top:10px;font-size:14px;opacity:.75}
+
+.menu{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+  gap:24px;
+}
+
+a{text-decoration:none}
+
+.item{
   background:#fff;
-  border-radius:18px;
-  padding:20px;
-  box-shadow:0 12px 28px rgba(0,0,0,.12);
-}
-
-.table-box h2{
+  border-radius:22px;
+  padding:28px 14px;
   text-align:center;
+  box-shadow:0 12px 28px rgba(0,0,0,.09);
+  transition:.35s;
+}
+.item:hover{
+  transform:translateY(-8px) scale(1.06);
+  box-shadow:0 22px 45px rgba(0,0,0,.18);
+}
+.item i{
+  font-size:38px;
   margin-bottom:12px;
+  color:#4CAF50;
+}
+.item span{
+  display:block;
+  font-size:16px;
+  font-weight:700;
 }
 
-.table-box p{
-  font-size:18px;
+footer{
+  margin-top:auto;
   text-align:center;
-  margin:6px 0;
+  font-size:13px;
+  padding:22px;
+  color:#666;
 }
 </style>
 </head>
 
 <body>
 
-<div class="tabs" id="tabs"></div>
+<div class="page-wrapper">
 
-<div class="table-box">
-  <h2 id="title">Table of 2</h2>
-  <div id="table"></div>
+  <div class="header">
+    <h1>📘 Multiplication Tables</h1>
+    <p>Select a Table</p>
+  </div>
+
+  <div class="menu">
+
+    <a href="https://aaqi1756.github.io/APPS/KL/math/tables/table-2.html"><div class="item"><i class="fa-solid fa-hashtag"></i><span>Table of 2</span></div></a>
+    <a href="https://aaqi1756.github.io/APPS/KL/math/tables/table-3.html"><div class="item"><i class="fa-solid fa-hashtag"></i><span>Table of 3</span></div></a>
+    <a href="https://aaqi1756.github.io/APPS/KL/math/tables/table-4.html"><div class="item"><i class="fa-solid fa-hashtag"></i><span>Table of 4</span></div></a>
+    <a href="https://aaqi1756.github.io/APPS/KL/math/tables/table-5.html"><div class="item"><i class="fa-solid fa-hashtag"></i><span>Table of 5</span></div></a>
+    <a href="https://aaqi1756.github.io/APPS/KL/math/tables/table-6.html"><div class="item"><i class="fa-solid fa-hashtag"></i><span>Table of 6</span></div></a>
+    <a href="https://aaqi1756.github.io/APPS/KL/math/tables/table-7.html"><div class="item"><i class="fa-solid fa-hashtag"></i><span>Table of 7</span></div></a>
+    <a href="https://aaqi1756.github.io/APPS/KL/math/tables/table-8.html"><div class="item"><i class="fa-solid fa-hashtag"></i><span>Table of 8</span></div></a>
+    <a href="https://aaqi1756.github.io/APPS/KL/math/tables/table-9.html"><div class="item"><i class="fa-solid fa-hashtag"></i><span>Table of 9</span></div></a>
+    <a href="https://aaqi1756.github.io/APPS/KL/math/tables/table-10.html"><div class="item"><i class="fa-solid fa-hashtag"></i><span>Table of 10</span></div></a>
+    <a href="https://aaqi1756.github.io/APPS/KL/math/tables/table-11.html"><div class="item"><i class="fa-solid fa-hashtag"></i><span>Table of 11</span></div></a>
+    <a href="https://aaqi1756.github.io/APPS/KL/math/tables/table-12.html"><div class="item"><i class="fa-solid fa-hashtag"></i><span>Table of 12</span></div></a>
+    <a href="https://aaqi1756.github.io/APPS/KL/math/tables/table-13.html"><div class="item"><i class="fa-solid fa-hashtag"></i><span>Table of 13</span></div></a>
+    <a href="https://aaqi1756.github.io/APPS/KL/math/tables/table-14.html"><div class="item"><i class="fa-solid fa-hashtag"></i><span>Table of 14</span></div></a>
+    <a href="https://aaqi1756.github.io/APPS/KL/math/tables/table-15.html"><div class="item"><i class="fa-solid fa-hashtag"></i><span>Table of 15</span></div></a>
+    <a href="https://aaqi1756.github.io/APPS/KL/math/tables/table-16.html"><div class="item"><i class="fa-solid fa-hashtag"></i><span>Table of 16</span></div></a>
+    <a href="https://aaqi1756.github.io/APPS/KL/math/tables/table-17.html"><div class="item"><i class="fa-solid fa-hashtag"></i><span>Table of 17</span></div></a>
+    <a href="https://aaqi1756.github.io/APPS/KL/math/tables/table-18.html"><div class="item"><i class="fa-solid fa-hashtag"></i><span>Table of 18</span></div></a>
+    <a href="https://aaqi1756.github.io/APPS/KL/math/tables/table-19.html"><div class="item"><i class="fa-solid fa-hashtag"></i><span>Table of 19</span></div></a>
+    <a href="https://aaqi1756.github.io/APPS/KL/math/tables/table-20.html"><div class="item"><i class="fa-solid fa-hashtag"></i><span>Table of 20</span></div></a>
+
+  </div>
+
 </div>
 
-<script>
-const tabs = document.getElementById("tabs");
-const tableDiv = document.getElementById("table");
-const title = document.getElementById("title");
-
-function loadTable(num){
-  title.innerText = "Table of " + num;
-  tableDiv.innerHTML = "";
-  for(let i=1;i<=10;i++){
-    tableDiv.innerHTML += `<p>${num} × ${i} = ${num*i}</p>`;
-  }
-  document.querySelectorAll(".tabs button").forEach(b=>b.classList.remove("active"));
-  document.getElementById("btn"+num).classList.add("active");
-}
-
-for(let i=2;i<=20;i++){
-  tabs.innerHTML += `<button id="btn${i}" onclick="loadTable(${i})">${i}</button>`;
-}
-
-loadTable(2);
-</script>
+<footer>
+  All Rights Reserved © AAQI Soft Solutions
+</footer>
 
 </body>
 </html>
