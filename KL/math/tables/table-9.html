@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Table of 9 – Fun Quiz</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    font-family:'Segoe UI',sans-serif;
+}
+body{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:linear-gradient(135deg,#43cea2,#185a9d);
+    padding:15px;
+}
+.quiz-box{
+    background:#fff;
+    width:100%;
+    max-width:360px;
+    border-radius:18px;
+    padding:25px;
+    text-align:center;
+    box-shadow:0 20px 40px rgba(0,0,0,0.25);
+    transition:0.4s;
+}
+.quiz-box.blur{
+    filter:blur(6px);
+    pointer-events:none;
+}
+h2{
+    margin-bottom:20px;
+    color:#333;
+}
+.option{
+    margin:10px 0;
+    padding:14px;
+    border-radius:12px;
+    background:#e6f7f3;
+    cursor:pointer;
+    font-size:18px;
+    transition:0.3s;
+    position:relative;
+    overflow:hidden;
+}
+.option::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:linear-gradient(120deg,transparent,#ffffffaa,transparent);
+    transform:translateX(-100%);
+    transition:0.4s;
+}
+.option:hover::after{
+    transform:translateX(100%);
+}
+.option:hover{
+    transform:scale(1.07);
+    background:#0bbcd6;
+    color:white;
+}
+.popup{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.45);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    visibility:hidden;
+    opacity:0;
+    transition:0.4s;
+}
+.popup.show{
+    visibility:visible;
+    opacity:1;
+}
+.popup-content{
+    background:#fff;
+    width:90%;
+    max-width:320px;
+    border-radius:18px;
+    padding:25px;
+    text-align:center;
+    animation:pop 0.5s ease;
+}
+@keyframes pop{
+    0%{transform:scale(0.5);opacity:0}
+    100%{transform:scale(1);opacity:1}
+}
+.popup p{
+    margin:6px 0;
+}
+.popup button{
+    margin:10px 6px 0;
+    padding:10px 18px;
+    border:none;
+    border-radius:8px;
+    font-size:15px;
+    cursor:pointer;
+    transition:0.3s;
+}
+.replay{
+    background:#28a745;
+    color:white;
+}
+.close{
+    background:#dc3545;
+    color:white;
+}
+.popup button:hover{
+    transform:scale(1.1);
+}
+@media(max-width:400px){
+    h2{font-size:20px;}
+    .option{font-size:16px;}
+}
+</style>
+</head>
+<body>
+
+<div class="quiz-box" id="quizBox">
+    <h2 id="question">Loading...</h2>
+    <div class="option" onclick="checkAnswer(this)"></div>
+    <div class="option" onclick="checkAnswer(this)"></div>
+    <div class="option" onclick="checkAnswer(this)"></div>
+    <div class="option" onclick="checkAnswer(this)"></div>
+</div>
+
+<div class="popup" id="popup">
+    <div class="popup-content">
+        <h3 id="greeting"></h3>
+        <p id="score"></p>
+        <p id="percent"></p>
+        <button class="replay" onclick="replay()">Replay</button>
+        <button class="close" onclick="closePopup()">Close</button>
+    </div>
+</div>
+
+<script>
+const table = 9;   // ✅ TABLE OF 9
+let questions = [];
+let current = 0;
+let correct = 0;
+let wrong = 0;
+
+function generateQuestions(){
+    questions = [];
+    for(let i=1;i<=10;i++){
+        let answer = table * i;
+        let options = new Set([answer]);
+
+        while(options.size < 4){
+            options.add(answer + (Math.floor(Math.random()*7)-3)*table);
+        }
+
+        questions.push({
+            q: `${table} × ${i} = ?`,
+            a: answer,
+            o: shuffle([...options])
+        });
+    }
+    questions = shuffle(questions);
+}
+
+function shuffle(arr){
+    return arr.sort(()=>Math.random()-0.5);
+}
+
+function loadQuestion(){
+    const q = questions[current];
+    document.getElementById("question").innerText =
+        `Question ${current+1}/10\n${q.q}`;
+
+    document.querySelectorAll(".option").forEach((el,i)=>{
+        el.innerText = q.o[i];
+    });
+}
+
+function checkAnswer(el){
+    Number(el.innerText) === questions[current].a ? correct++ : wrong++;
+    current++;
+    current < 10 ? loadQuestion() : showResult();
+}
+
+function showResult(){
+    document.getElementById("quizBox").classList.add("blur");
+    document.getElementById("popup").classList.add("show");
+
+    let percent = Math.round((correct/10)*100);
+    let msg = percent >= 70 ? "🎉 Excellent!" :
+              percent >= 40 ? "😊 Good Job!" :
+              "💪 Keep Practicing!";
+
+    document.getElementById("greeting").innerText = msg;
+    document.getElementById("score").innerText =
+        `Correct: ${correct} | Wrong: ${wrong}`;
+    document.getElementById("percent").innerText =
+        `Percentage: ${percent}%`;
+}
+
+function replay(){
+    current = correct = wrong = 0;
+    generateQuestions();
+    loadQuestion();
+    document.getElementById("quizBox").classList.remove("blur");
+    document.getElementById("popup").classList.remove("show");
+}
+
+function closePopup(){
+    window.location.href = "https://aaqi1756.github.io/APPS/KL/math/tables/tables.html";
+}
+
+generateQuestions();
+loadQuestion();
+</script>
+
+</body>
+</html>
