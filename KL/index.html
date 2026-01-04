@@ -1,201 +1,141 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kids Learning APP KLA </title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Happy Kids Learning</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <style>
-  #clock {
-  font-weight: 700;
-  color: #4CAF50;
+:root{
+  --bg1:#fff3e0;
+  --bg2:#e1f5fe;
+  --bg3:#fce4ec;
+  --bg4:#e8f5e9;
+  --card:#ffffff;
+  --primary:#ff7043;
+  --secondary:#42a5f5;
+  --success:#66bb6a;
+  --fun:#ab47bc;
 }
-
-#location {
-  font-size: 13px;
-  opacity: 0.8;
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:'Poppins', system-ui, sans-serif;
+  background:linear-gradient(120deg,var(--bg1),var(--bg2));
+  transition:background 1s ease;
 }
-
-  
-  
-  
-  body{
-    margin:0;
-    font-family:system-ui, sans-serif;
-    background:#f4f6f8;
-    color:#333;
-  }
-
-  .top-space{ height:40px; }
-
-  .header{
-    padding:0 20px 10px;
-    max-width:900px;
-    margin:auto;
-  }
-
-  .greeting{
-    font-size:20px;
-    font-weight:700;
-  }
-
-  .date{
-    font-size:14px;
-    opacity:.7;
-    margin-top:4px;
-  }
-
-  .quote{
-    margin-top:14px;
-    font-style:italic;
-    font-size:14px;
-    background:#fff;
-    padding:12px 14px;
-    border-radius:12px;
-    box-shadow:0 6px 16px rgba(0,0,0,.08);
-  }
-
-  .menu{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
-    gap:16px;
-    padding:16px;
-    max-width:900px;
-    margin:auto;
-  }
-
-  a{ text-decoration:none; }
-
-  .item{
-    background:#fff;
-    border-radius:16px;
-    padding:22px 10px;
-    text-align:center;
-    box-shadow:0 8px 20px rgba(0,0,0,.08);
-    transition:.3s ease;
-    cursor:pointer;
-  }
-
-  .item:hover{
-    transform:translateY(-6px) scale(1.04);
-    box-shadow:0 16px 32px rgba(0,0,0,.15);
-  }
-
-  .item i{
-    font-size:36px;
-    margin-bottom:10px;
-    color:#4CAF50;
-    transition:.3s;
-  }
-
-  .item:hover i{
-    color:#ff5722;
-    transform:scale(1.2) rotate(10deg);
-  }
-
-  .item span{
-    display:block;
-    font-size:15px;
-    font-weight:600;
-  }
-
-  .footer-space{ height:80px; }
-  
-  .footer {
-  text-align: center;
-  font-size: 13px;
-  padding: 14px 10px 20px;
-  color: #666;
-  background: transparent;
+.wave{
+  position:absolute;
+  top:0;left:0;
+  width:100%;
+  height:160px;
+  background:var(--primary);
+  border-bottom-left-radius:50% 40%;
+  border-bottom-right-radius:50% 40%;
 }
-
-.footer span {
-  font-weight: 600;
+header{
+  position:relative;
+  text-align:center;
+  padding:40px 20px 10px;
+  color:#fff;
 }
-
-  
-  
-  
+header h1{
+  margin:0;
+  font-size:clamp(24px,6vw,36px);
+}
+header p{font-size:14px;opacity:.9}
+.quotes{
+  margin:14px auto 0;
+  max-width:90%;
+  background:rgba(255,255,255,.2);
+  padding:10px 18px;
+  border-radius:20px;
+  font-size:14px;
+  animation:fadeIn .8s ease;
+}
+.container{
+  margin-top:50px;
+  padding:20px;
+  max-width:1100px;
+  margin-inline:auto;
+}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+  gap:18px;
+}
+.card{
+  background:var(--card);
+  border-radius:22px;
+  padding:26px 16px;
+  text-align:center;
+  box-shadow:0 12px 30px rgba(0,0,0,.15);
+  transition:.35s;
+  animation:floatIn .8s ease;
+  cursor:pointer;
+}
+.card:hover{transform:translateY(-10px) rotate(1deg)}
+.icon{
+  width:70px;height:70px;margin:auto;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:34px;color:#fff;margin-bottom:14px;
+  animation:bounce 2s infinite;
+}
+.math{background:var(--secondary)}
+.english{background:var(--primary)}
+.gk{background:var(--success)}
+.practice{background:var(--fun)}
+.card span{font-weight:700;font-size:15px}
+.space-footer{height:40px}
+footer{
+  text-align:center;
+  font-size:13px;
+  padding:20px;
+  background:#fff;
+  opacity:.8;
+}
+@keyframes floatIn{from{opacity:0;transform:translateY(40px)}to{opacity:1}}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+@keyframes fadeIn{from{opacity:0;transform:scale(.95)}to{opacity:1}}
 </style>
 </head>
 <body>
-
-<div class="top-space"></div>
-
-<div class="header">
-  <div class="greeting" id="greeting"></div>
-<div class="date" id="dateTime"></div>
-<div class="quote" id="quote"></div>
-
-
+<div class="wave"></div>
+<header>
+  <h1>😊 Happy Kids Learning 😊</h1>
+  <p>Learn with joy, play with fun 🎉</p>
+  <div class="quotes" id="quoteBox">🌟 Learning is an adventure!</div>
+</header>
+<div class="container">
+  <div class="grid">
+    <div class="card" data-link="https://aaqi1756.github.io/APPS/KL/404.html"><div class="icon math"><i class="fa-solid fa-calculator"></i></div><span>Math Games</span></div>
+    <div class="card" data-link="https://aaqi1756.github.io/APPS/KL/404.html"><div class="icon english"><i class="fa-solid fa-language"></i></div><span>English Games</span></div>
+    <div class="card" data-link="https://aaqi1756.github.io/APPS/KL/404.html"><div class="icon gk"><i class="fa-solid fa-brain"></i></div><span>GK Games</span></div>
+    <div class="card" data-link="https://aaqi1756.github.io/APPS/KL/404.html"><div class="icon practice"><i class="fa-solid fa-book"></i></div><span>Daily Practice</span></div>
+    <div class="card" data-link="https://aaqi1756.github.io/APPS/KL/404.html"><div class="icon math"><i class="fa-solid fa-puzzle-piece"></i></div><span>Puzzle Fun</span></div>
+    <div class="card" data-link="https://aaqi1756.github.io/APPS/KL/404.html"><div class="icon english"><i class="fa-solid fa-music"></i></div><span>Music Time</span></div>
+    <div class="card" data-link="https://aaqi1756.github.io/APPS/KL/404.html"><div class="icon gk"><i class="fa-solid fa-paintbrush"></i></div><span>Drawing</span></div>
+    <div class="card" data-link="https://aaqi1756.github.io/APPS/KL/404.html"><div class="icon practice"><i class="fa-solid fa-star"></i></div><span>Fun Quiz</span></div>
+  </div>
 </div>
-
-<div class="menu">
-  <a href="https://aaqi1756.github.io/APPS/KL/math/index.html">
-    <div class="item"><i class="fa-solid fa-square-root-variable"></i><span>Math Learning</span></div>
-  </a>
-  <a href="https://aaqi1756.github.io/APPS/KL/english/english.html">
-    <div class="item"><i class="fa-solid fa-language"></i><span>English Learning</span></div>
-  </a>
-  <a href="https://aaqi1756.github.io/APPS/KL/404.html">
-    <div class="item"><i class="fa-solid fa-brain"></i><span>General Knowledge</span></div>
-  </a>
-  <a href="https://aaqi1756.github.io/APPS/KL/404.html">
-    <div class="item"><i class="fa-solid fa-book-open"></i><span>Daily Practice</span></div>
-  </a>
-  
-  <a href="https://aaqi1756.github.io/APPS/KL/about.html">
-    <div class="item"><i class="fa-solid fa-users / fa-circle-info"></i><span>About</span></div>
-  </a>
-  
- 
-  <a href="https://aaqi1756.github.io/APPS/KL/more-apps.html">
-    <div class="item"><i class="fa-solid fa-mobile-screen-button"></i><span>More Apps</span></div>
-  </a>
-</div>
-
-<div class="footer-space"></div>
-  
-  
+<div class="space-footer"></div>
+<footer>All Rights Reserved © AAQI Soft Solutions</footer>
 <script>
-  // ---------- GREETING ----------
-  function updateGreeting() {
-    const hour = new Date().getHours();
-    let greet = "Good Evening Dear";
+// background auto change
+const bgs=[
+  'linear-gradient(120deg,var(--bg1),var(--bg2))',
+  'linear-gradient(120deg,var(--bg3),var(--bg4))',
+  'linear-gradient(120deg,var(--bg2),var(--bg3))'
+];
+let bgIndex=0;
+setInterval(()=>{
+  bgIndex=(bgIndex+1)%bgs.length;
+  document.body.style.background=bgs[bgIndex];
+},1000);
 
-    if (hour < 12) greet = "Good Morning Dear";
-    else if (hour < 17) greet = "Good Afternoon Dear";
-
-    document.getElementById("greeting").innerText = greet;
-  }
-
-  // ---------- DATE | TIME ----------
-  function updateDateTime() {
-    const now = new Date();
-
-    const date = now.toLocaleDateString(undefined, {
-      weekday: "long",
-      year: "numeric",
-      month: "long",
-      day: "numeric"
-    });
-
-    const time = now.toLocaleTimeString(undefined, {
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit"
-    });
-
-    document.getElementById("dateTime").innerText =
-      `${date} | ${time}`;
-  }
-
-  setInterval(updateDateTime, 1000);
-
-  // ---------- QUOTES ----------
-  const quotes = [
-    "Small steps every day lead to big success.",
+// quotes rotation
+const quotes=[
+      "Small steps every day lead to big success.",
   "Small steps every day lead to big success.",
 "Believe in yourself and keep trying.",
 "Learning makes you stronger every day.",
@@ -1010,22 +950,28 @@
 "Keep trying, success will come.",
 "Your imagination can create wonders.",
 "Knowledge is the best investment."
-  ];
+];
+const quoteBox=document.getElementById('quoteBox');
+function changeQuote(){
+  quoteBox.style.opacity=0;
+  setTimeout(()=>{
+    quoteBox.textContent=quotes[Math.floor(Math.random()*quotes.length)];
+    quoteBox.style.opacity=1;
+  },400);
+}
+setInterval(changeQuote,Math.floor(Math.random()*7000)+3000);
 
- document.getElementById("quote").innerText =
-  quotes[Math.floor(Math.random() * quotes.length)];
-  // ---------- INIT ----------
-  updateGreeting();
-  updateDateTime();
+// card click
+const cards=document.querySelectorAll('.card');
+cards.forEach(c=>{
+  c.addEventListener('click',()=>{
+    c.style.transform='scale(0.9)';
+    setTimeout(()=>{
+      c.style.transform='';
+      window.location.href=c.dataset.link;
+    },180);
+  })
+});
 </script>
-  <div class="footer-space"></div>
-<footer class="footer">
-  All Rights Reserved © <span id="year"></span> AAQI Soft Solutions
-</footer>
+</body>
 </html>
-
-
-
-
-
-
