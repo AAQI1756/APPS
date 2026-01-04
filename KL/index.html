@@ -8,6 +8,97 @@
 <style>
   
   
+  
+  /* header animation zone */
+#header-effects{
+  position:relative;
+  height:260px; /* control how much area gets animation */
+  overflow:hidden;
+}
+
+/* animation layer */
+#kids-effects{
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  pointer-events:none;
+  z-index:1;
+}
+
+/* floating items */
+.kid-item{
+  position:absolute;
+  font-size:22px;
+  opacity:0.85;
+  animation: floatDown linear infinite;
+}
+
+@keyframes floatDown{
+  0%{
+    transform:translateY(-40px) rotate(0deg);
+    opacity:0;
+  }
+  15%{opacity:1;}
+  100%{
+    transform:translateY(300px) rotate(360deg);
+    opacity:0;
+  }
+}
+
+/* keep header content above animation */
+header{
+  position:relative;
+  z-index:2;
+}
+
+  
+  
+  
+  
+  
+  #kids-effects{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  pointer-events:none;
+  overflow:hidden;
+  z-index:0;
+}
+
+/* floating items */
+.kid-item{
+  position:absolute;
+  font-size:22px;
+  opacity:0.8;
+  animation: floatDown linear infinite;
+}
+
+@keyframes floatDown{
+  0%{
+    transform:translateY(-50px) rotate(0deg);
+    opacity:0;
+  }
+  10%{opacity:1;}
+  100%{
+    transform:translateY(110vh) rotate(360deg);
+    opacity:0;
+  }
+}
+
+/* keep content above effects */
+header,
+.container,
+footer{
+  position:relative;
+  z-index:2;
+}
+
+  
+  
   @keyframes neonGlow{
   0%{
     box-shadow:
@@ -151,12 +242,20 @@ footer{
 </style>
 </head>
 <body>
-<div class="wave"></div>
-<header>
-  <h1>😊 Happy Kids Learning 😊</h1>
-  <p>Learn with joy, play with fun 🎉</p>
-  <div class="quotes" id="quoteBox">🌟 Learning is an adventure!</div>
-</header>
+  
+ <div class="wave"></div>
+
+  
+  <div id="kids-effects"></div>
+
+  <header>
+    <h1>😊 Happy Kids Learning 😊</h1>
+    <p>Learn with joy, play with fun 🎉</p>
+    <div class="quotes" id="quoteBox">🌟 Learning is an adventure!</div>
+  </header>
+</div>
+
+  
 <div class="container">
   <div class="grid">
     <div class="card" data-link="https://aaqi1756.github.io/APPS/KL/404.html"><div class="icon math"><i class="fa-solid fa-calculator"></i></div><span>Math Games</span></div>
@@ -172,6 +271,41 @@ footer{
 <div class="space-footer"></div>
 <footer>All Rights Reserved © AAQI Soft Solutions</footer>
 <script>
+  
+ 
+  const effectsContainer = document.getElementById("kids-effects");
+
+const kidsItems = ["❄️","🌸","⭐","🎈","☁️","🦋","🌈","😊"];
+
+function createKidItem(){
+  const item = document.createElement("div");
+  item.className = "kid-item";
+  item.textContent = kidsItems[Math.floor(Math.random()*kidsItems.length)];
+
+  item.style.left = Math.random()*100 + "%";
+  item.style.animationDuration = (5 + Math.random()*4) + "s";
+  item.style.fontSize = (16 + Math.random()*14) + "px";
+
+  effectsContainer.appendChild(item);
+
+  setTimeout(()=>item.remove(),9000);
+}
+
+setInterval(createKidItem,700);
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
 // background auto change
 const bgs=[
   'linear-gradient(120deg,var(--bg1),var(--bg2))',
