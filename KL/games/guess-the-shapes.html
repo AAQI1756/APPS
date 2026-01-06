@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Shape Shifter | AAQI Soft Solutions</title>
+    <style>
+        :root {
+            --primary: #FF6B6B;
+            --success: #00D166;
+            --danger: #FF4757;
+            --dark: #2D3436;
+            --glass: rgba(255, 255, 255, 0.95);
+        }
+
+        * { box-sizing: border-box; font-family: 'Poppins', sans-serif; margin: 0; padding: 0; touch-action: manipulation; }
+
+        body {
+            background: linear-gradient(135deg, #A18CD1 0%, #FBC2EB 100%);
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            height: 100vh; width: 100vw; overflow: hidden; padding: 10px;
+        }
+
+        .quiz-container {
+            background: var(--glass);
+            width: 100%; max-width: 400px; height: 90vh;
+            border-radius: 30px; box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+            overflow: hidden; position: relative; display: flex; flex-direction: column;
+        }
+
+        .header {
+            padding: 10px 15px; display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 1px solid #eee; background: #fff;
+        }
+
+        .header-controls { display: flex; align-items: center; gap: 8px; }
+
+        .btn-circle {
+            background: #f0f2f5; border: none; width: 32px; height: 32px;
+            border-radius: 50%; cursor: pointer; display: flex;
+            align-items: center; justify-content: center; font-size: 0.8rem;
+        }
+
+        .timer {
+            background: var(--dark); color: white; padding: 2px 10px;
+            border-radius: 20px; font-size: 0.75rem; font-weight: bold; min-width: 45px; text-align: center;
+        }
+
+        .quiz-body { 
+            padding: 15px; text-align: center; flex-grow: 1; 
+            display: flex; flex-direction: column; justify-content: space-around;
+        }
+
+        /* The Shadow Logic */
+        .shadow-box {
+            height: 100px; width: 100px; margin: 0 auto;
+            background: #2D3436; display: flex; align-items: center; justify-content: center;
+            clip-path: none; /* Changed by JS */
+            filter: drop-shadow(0 5px 10px rgba(0,0,0,0.3));
+        }
+
+        #q-text { font-size: 1.2rem; color: var(--dark); font-weight: 700; margin: 5px 0; }
+
+        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; height: 55%; }
+
+        .option {
+            border: 3px solid #f0f0f0; border-radius: 20px;
+            cursor: pointer; transition: 0.2s; background: white;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            padding: 10px;
+        }
+
+        .option.correct-glow { border-color: var(--success); background: #e6ffed; transform: scale(0.95); }
+        .option.wrong-glow { border-color: var(--danger); background: #fff5f5; }
+
+        .shape-preview {
+            width: 50px; height: 50px; margin-bottom: 8px;
+        }
+
+        .option span { font-weight: 800; color: #444; font-size: 0.85rem; }
+
+        #pause-overlay, #result-overlay {
+            position: absolute; inset: 0; background: #fff;
+            display: none; flex-direction: column; justify-content: center; align-items: center; z-index: 200;
+        }
+
+        .btn-main {
+            background: var(--primary); color: white; border: none;
+            padding: 12px 30px; border-radius: 15px; font-weight: 600; cursor: pointer;
+        }
+
+        .copyright { margin-top: 10px; color: white; font-size: 0.7rem; text-align: center; }
+    </style>
+</head>
+<body onclick="initAudio()">
+
+<audio id="bgMusic" loop>
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3" type="audio/mpeg">
+</audio>
+
+<div class="quiz-container">
+    <div id="pause-overlay">
+        <h2 style="color:var(--primary); margin-bottom:20px;">Game Paused</h2>
+        <button class="btn-main" onclick="togglePause()">Resume ▶</button>
+    </div>
+
+    <div id="quiz-ui" style="height: 100%; display: flex; flex-direction: column;">
+        <div class="header">
+            <span style="font-weight:800; color:#444; font-size:0.9rem;">AAQI Shape</span>
+            <div class="header-controls">
+                <button class="btn-circle" onclick="toggleMusic()" id="music-btn">🔊</button>
+                <button class="btn-circle" onclick="togglePause()" id="pause-btn">⏸</button>
+                <div class="timer" id="timer">15s</div>
+            </div>
+        </div>
+        
+        <div style="height:4px; background:#eee;"><div id="progress" style="height:100%; background:var(--success); width:0%; transition:0.4s;"></div></div>
+
+        <div class="quiz-body" id="quiz-body-content">
+            <div id="target-shadow" class="shadow-box"></div>
+            <h2 id="q-text">Find the Match!</h2>
+            <div class="options-grid" id="options-container"></div>
+            <div id="count" style="font-size:0.8rem; color:#888; font-weight:bold;">Question 1/8</div>
+        </div>
+    </div>
+
+    <div id="result-overlay">
+        <h2 style="color:var(--primary)">Super Solver!</h2>
+        <div style="font-size: 3rem; margin: 20px 0;" id="final-score">0/8</div>
+        <button class="btn-main" onclick="resetQuiz()">Play Again</button>
+    </div>
+</div>
+
+<div class="copyright">© AAQI Soft Solutions</div>
+
+<script>
+    const shapePool = [
+        { name: "Square", path: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)", color: "#FF6B6B" },
+        { name: "Triangle", path: "polygon(50% 0%, 0% 100%, 100% 100%)", color: "#4ECDC4" },
+        { name: "Circle", path: "circle(50% at 50% 50%)", color: "#FFE66D" },
+        { name: "Diamond", path: "polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)", color: "#1A535C" },
+        { name: "Pentagon", path: "polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%)", color: "#FF9F1C" },
+        { name: "Star", path: "polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)", color: "#70d6ff" },
+        { name: "Hexagon", path: "polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)", color: "#ff70a6" },
+        { name: "Cross", path: "polygon(20% 0%, 80% 0%, 80% 20%, 100% 20%, 100% 80%, 80% 80%, 80% 100%, 20% 100%, 20% 80%, 0% 80%, 0% 20%, 20% 20%)", color: "#be95c4" }
+    ];
+
+    let current = 0, score = 0, time = 15, timer, canClick = true, isPaused = false;
+    let quizData = [];
+    let audioInitialized = false;
+    let musicMuted = false;
+    const music = document.getElementById('bgMusic');
+
+    function initAudio() { if (!audioInitialized) { music.play(); audioInitialized = true; } }
+
+    function toggleMusic() { 
+        musicMuted = !musicMuted; music.muted = musicMuted; 
+        document.getElementById('music-btn').innerText = musicMuted ? '🔇' : '🔊';
+    }
+
+    function togglePause() {
+        isPaused = !isPaused;
+        document.getElementById('pause-overlay').style.display = isPaused ? 'flex' : 'none';
+        isPaused ? music.pause() : (!musicMuted && music.play());
+    }
+
+    function prepareQuiz() {
+        quizData = [];
+        let shuffled = [...shapePool].sort(() => Math.random() - 0.5);
+        shuffled.slice(0, 8).forEach(shape => {
+            let wrongs = shapePool.filter(s => s.name !== shape.name).sort(() => Math.random() - 0.5).slice(0, 3);
+            quizData.push({
+                correct: shape,
+                options: [{ ...shape, isCorrect: true }, ...wrongs.map(w => ({...w, isCorrect: false}))].sort(() => Math.random() - 0.5)
+            });
+        });
+    }
+
+    function startTimer() {
+        clearInterval(timer);
+        timer = setInterval(() => {
+            if (!isPaused && time > 0) {
+                time--; document.getElementById('timer').innerText = time + "s";
+            } else if (!isPaused && time <= 0) { handleSelection(null); }
+        }, 1000);
+    }
+
+    function loadQ() {
+        canClick = true; time = 15;
+        document.getElementById('timer').innerText = "15s";
+        const q = quizData[current];
+        
+        document.getElementById('target-shadow').style.clipPath = q.correct.path;
+        document.getElementById('count').innerText = `Shape ${current + 1} of 8`;
+        document.getElementById('progress').style.width = `${(current / 8) * 100}%`;
+        
+        const container = document.getElementById('options-container');
+        container.innerHTML = '';
+        q.options.forEach(opt => {
+            const b = document.createElement('div');
+            b.className = 'option';
+            b.innerHTML = `<div class="shape-preview" style="background:${opt.color}; clip-path:${opt.path}"></div><span>${opt.name}</span>`;
+            b.onclick = () => handleSelection(b, opt.isCorrect);
+            container.appendChild(b);
+        });
+        startTimer();
+    }
+
+    function handleSelection(el, isCorrect) {
+        if(!canClick || isPaused) return;
+        canClick = false; clearInterval(timer);
+        
+        if(isCorrect) { score++; el.classList.add('correct-glow'); }
+        else if(el) { el.classList.add('wrong-glow'); }
+        
+        setTimeout(() => {
+            current++;
+            if (current < 8) loadQ(); else showResult();
+        }, 600);
+    }
+
+    function showResult() {
+        music.pause();
+        document.getElementById('result-overlay').style.display = 'flex';
+        document.getElementById('final-score').innerText = `${score}/8`;
+    }
+
+    function resetQuiz() {
+        current = 0; score = 0; isPaused = false;
+        document.getElementById('result-overlay').style.display = 'none';
+        if(!musicMuted) music.play();
+        prepareQuiz(); loadQ();
+    }
+
+    prepareQuiz(); loadQ();
+</script>
+</body>
+</html>
