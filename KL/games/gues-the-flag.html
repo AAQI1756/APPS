@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Flag Master | AAQI Soft Solutions</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
+        :root {
+            --primary: #4834d4;
+            --success: #2ecc71;
+            --danger: #eb4d4b;
+            --dark: #130f40;
+            --glass-white: rgba(255, 255, 255, 0.96);
+        }
+        * { box-sizing: border-box; font-family: 'Poppins', sans-serif; margin: 0; padding: 0; }
+        body {
+            background: linear-gradient(135deg, #686de0 0%, #4834d4 100%);
+            display: flex; flex-direction: column; align-items: center;
+            height: 100vh; width: 100vw; overflow: hidden;
+        }
+        .app-container {
+            width: 95%; max-width: 420px; height: 88vh;
+            background: var(--glass-white);
+            margin-top: 2vh; border-radius: 35px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+            position: relative; display: flex; flex-direction: column; overflow: hidden;
+        }
+        #start-screen {
+            position: absolute; inset: 0; background: #fff; z-index: 100;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            padding: 20px; text-align: center; transition: 0.5s;
+        }
+        .title-anim { font-size: 2.5rem; font-weight: 800; color: var(--dark); animation: float 3s infinite; }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+        .header { padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; background: #fff; border-bottom: 1px solid #eee; flex-shrink: 0; }
+        .timer-box { background: var(--dark); color: #fff; padding: 4px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; }
+        .scroll-area { flex-grow: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; align-items: center; }
+        .flag-box { width: 100%; max-width: 240px; border-radius: 15px; border: 4px solid #fff; box-shadow: 0 10px 20px rgba(0,0,0,0.1); margin-bottom: 20px; object-fit: cover; }
+        .options-grid { width: 100%; display: grid; gap: 10px; }
+        .opt-btn { background: #fff; border: 2px solid #f0f1f3; padding: 14px; border-radius: 18px; cursor: pointer; font-weight: 600; color: var(--dark); transition: 0.2s; text-align: center; }
+        .opt-btn.correct { background: var(--success) !important; color: #fff; border-color: var(--success); }
+        .opt-btn.wrong { background: var(--danger) !important; color: #fff; border-color: var(--danger); }
+        .blur-overlay { position: absolute; inset: 0; background: rgba(255, 255, 255, 0.4); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); display: none; flex-direction: column; justify-content: center; align-items: center; z-index: 500; }
+        .popup-card { background: #fff; width: 85%; padding: 30px 20px; border-radius: 30px; box-shadow: 0 15px 40px rgba(0,0,0,0.2); text-align: center; transform: scale(0.9); transition: 0.3s; }
+        .btn-action { background: var(--primary); color: #fff; border: none; padding: 15px 40px; border-radius: 50px; font-weight: 600; cursor: pointer; }
+        .footer-text { margin-top: 15px; color: #fff; font-size: 0.85rem; font-weight: 600; }
+    </style>
+</head>
+<body>
+
+<audio id="bg-music" loop>
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-17.mp3" type="audio/mpeg">
+</audio>
+
+<div class="app-container">
+    <div id="start-screen">
+        <h1 class="title-anim">WORLD FLAGS</h1>
+        <p style="color:#666; margin-bottom:30px; font-weight:500;">AAQI Soft Solutions</p>
+        <button class="btn-action" onclick="startGame()">START QUIZ ▶</button>
+    </div>
+
+    <div class="header">
+        <span style="font-weight:800; color:var(--primary);">AAQI SOFT</span>
+        <div style="display:flex; gap:12px; align-items:center;">
+            <span onclick="showHint()" style="cursor:pointer; font-size:1.5rem; background:#f0f0f0; border-radius:50%; width:35px; height:35px; display:flex; align-items:center; justify-content:center;">💡</span>
+            <div class="timer-box" id="timer">15s</div>
+        </div>
+    </div>
+
+    <div class="scroll-area">
+        <img id="flag-img" class="flag-box" src="" alt="Flag">
+        <div class="options-grid" id="options-box"></div>
+        <p id="stats" style="margin-top:20px; font-weight:800; color:#ccc; letter-spacing:2px;">1 / 10</p>
+    </div>
+
+    <div id="hint-overlay" class="blur-overlay">
+        <div class="popup-card">
+            <h2 style="color:var(--primary); margin-bottom:15px;">Country Info</h2>
+            <div id="hint-content" style="text-align:left; font-size:0.9rem; color:#444; line-height:1.7;"></div>
+            <button class="btn-action" onclick="closeHint()" style="margin-top:15px;">Close</button>
+        </div>
+    </div>
+
+    <div id="result-overlay" class="blur-overlay">
+        <div class="popup-card">
+            <h2 id="greeting-text" style="color:var(--dark); margin-bottom:5px;">Excellent!</h2>
+            <div id="final-score" style="font-size:3.5rem; font-weight:800; color:var(--primary); margin:10px 0;">0/10</div>
+            <button class="btn-action" onclick="resetGame()">REPLAY 🔄</button>
+        </div>
+    </div>
+</div>
+
+<div class="footer-text">All rights reserved © AAQI Soft Solutions</div>
+
+<script>
+    const countries = [
+        { name: "Pakistan", code: "pk", cur: "Pakistani Rupee", lang: "Urdu", date: "14 Aug 1947" },
+        { name: "India", code: "in", cur: "Indian Rupee", lang: "Hindi", date: "15 Aug 1947" },
+        { name: "Saudi Arabia", code: "sa", cur: "Saudi Riyal", lang: "Arabic", date: "23 Sep 1932" },
+        { name: "Turkey", code: "tr", cur: "Turkish Lira", lang: "Turkish", date: "29 Oct 1923" },
+        { name: "Palestine", code: "ps", cur: "NIS/JOD", lang: "Arabic", date: "15 Nov 1988" },
+        { name: "Indonesia", code: "id", cur: "Rupiah", lang: "Indonesian", date: "17 Aug 1945" },
+        { name: "Afghanistan", code: "af", cur: "Afghani", lang: "Pashto", date: "19 Aug 1919" },
+        { name: "UAE", code: "ae", cur: "Dirham", lang: "Arabic", date: "02 Dec 1971" },
+        { name: "China", code: "cn", cur: "Yuan", lang: "Mandarin", date: "01 Oct 1949" },
+        { name: "USA", code: "us", cur: "Dollar", lang: "English", date: "04 July 1776" },
+        { name: "UK", code: "gb", cur: "Pound", lang: "English", date: "01 Jan 1801" },
+        { name: "Japan", code: "jp", cur: "Yen", lang: "Japanese", date: "11 Feb 660 BC" },
+        { name: "Brazil", code: "br", cur: "Real", lang: "Portuguese", date: "07 Sep 1822" },
+        { name: "France", code: "fr", cur: "Euro", lang: "French", date: "14 July 1789" },
+        { name: "Germany", code: "de", cur: "Euro", lang: "German", date: "18 Jan 1871" },
+        { name: "Russia", code: "ru", cur: "Ruble", lang: "Russian", date: "25 Dec 1991" },
+        { name: "Australia", code: "au", cur: "AUD", lang: "English", date: "01 Jan 1901" },
+        { name: "Canada", code: "ca", cur: "CAD", lang: "English/French", date: "01 July 1867" },
+        { name: "Egypt", code: "eg", cur: "EGP", lang: "Arabic", date: "28 Feb 1922" },
+        { name: "Iran", code: "ir", cur: "Rial", lang: "Persian", date: "01 Apr 1979" }
+    ];
+
+    let current = 0, score = 0, time = 15, timer, quizData = [], locked = false, isPaused = false;
+    const music = document.getElementById('bg-music');
+
+    function startGame() {
+        document.getElementById('start-screen').style.transform = 'translateY(-100%)';
+        music.volume = 0.3;
+        music.play();
+        prepareQuiz();
+    }
+
+    function prepareQuiz() {
+        let pool = [...countries].sort(() => Math.random() - 0.5);
+        quizData = pool.slice(0, 10).map(c => {
+            let wrongs = countries.filter(x => x.name !== c.name).sort(() => Math.random() - 0.5).slice(0, 3);
+            return { correct: c, opts: [c, ...wrongs].sort(() => Math.random() - 0.5) };
+        });
+        loadQuestion();
+    }
+
+    function loadQuestion() {
+        locked = false; time = 15;
+        document.getElementById('timer').innerText = "15s";
+        const q = quizData[current];
+        document.getElementById('flag-img').src = `https://flagcdn.com/w320/${q.correct.code}.png`;
+        document.getElementById('stats').innerText = `${current + 1} / 10`;
+
+        const box = document.getElementById('options-box');
+        box.innerHTML = '';
+        q.opts.forEach(o => {
+            const btn = document.createElement('div');
+            btn.className = 'opt-btn';
+            btn.innerText = o.name;
+            btn.onclick = () => check(btn, o.name === q.correct.name);
+            box.appendChild(btn);
+        });
+        startTimer();
+    }
+
+    function startTimer() {
+        clearInterval(timer);
+        timer = setInterval(() => {
+            if(!isPaused) {
+                time--;
+                document.getElementById('timer').innerText = time + "s";
+                if(time <= 0) check(null, false);
+            }
+        }, 1000);
+    }
+
+    function check(btn, isRight) {
+        if(locked) return;
+        locked = true; clearInterval(timer);
+        if(isRight) {
+            score++; if(btn) btn.classList.add('correct');
+        } else {
+            if(btn) btn.classList.add('wrong');
+            Array.from(document.querySelectorAll('.opt-btn')).forEach(b => {
+                if(b.innerText === quizData[current].correct.name) b.classList.add('correct');
+            });
+        }
+        setTimeout(() => {
+            current++;
+            if(current < 10) loadQuestion();
+            else showResult();
+        }, 1500);
+    }
+
+    function showHint() {
+        if(locked) return;
+        isPaused = true;
+        const q = quizData[current].correct;
+        document.getElementById('hint-content').innerHTML = `
+            <strong>💰 Currency:</strong> ${q.cur}<br>
+            <strong>🗣 Language:</strong> ${q.lang}<br>
+            <strong>📅 Foundation:</strong> ${q.date}
+        `;
+        document.getElementById('hint-overlay').style.display = 'flex';
+        setTimeout(() => document.getElementById('hint-overlay').children[0].style.transform = 'scale(1)', 10);
+    }
+
+    function closeHint() {
+        isPaused = false;
+        document.getElementById('hint-overlay').children[0].style.transform = 'scale(0.9)';
+        setTimeout(() => document.getElementById('hint-overlay').style.display = 'none', 200);
+    }
+
+    function showResult() {
+        let greet = (score === 10) ? "Outstanding! 🌍" : (score >= 7) ? "Great Job! 🌟" : (score >= 5) ? "Good Effort! 📚" : "Keep Practicing! 💪";
+        document.getElementById('greeting-text').innerText = greet;
+        document.getElementById('final-score').innerText = `${score}/10`;
+        const res = document.getElementById('result-overlay');
+        res.style.display = 'flex';
+        setTimeout(() => res.children[0].style.transform = 'scale(1)', 10);
+    }
+
+    function resetGame() {
+        // Reset Logic
+        current = 0;
+        score = 0;
+        locked = false;
+        isPaused = false;
+        
+        // Hide overlay
+        const res = document.getElementById('result-overlay');
+        res.children[0].style.transform = 'scale(0.9)';
+        setTimeout(() => {
+            res.style.display = 'none';
+            prepareQuiz(); // Start new quiz session
+        }, 200);
+    }
+</script>
+</body>
+</html>
