@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kids ABC Quiz | AAQI Soft Solutions</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6C63FF;
+            --success: #00D166;
+            --dark: #2D3436;
+            --glass: rgba(255, 255, 255, 0.95);
+        }
+
+        * { box-sizing: border-box; font-family: 'Poppins', sans-serif; margin: 0; padding: 0; }
+
+        body {
+            background: linear-gradient(-45deg, #FF9A9E, #FAD0C4, #A1C4FD, #C2E9FB);
+            background-size: 400% 400%;
+            animation: moveGradient 15s ease infinite;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            min-height: 100vh; padding: 20px;
+        }
+
+        @keyframes moveGradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .quiz-container {
+            background: var(--glass);
+            width: 100%; max-width: 450px; height: 650px;
+            border-radius: 30px; box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+            overflow: hidden; position: relative; display: flex; flex-direction: column;
+        }
+
+        /* Animation Stage */
+        #animation-stage {
+            position: absolute; inset: 0; background: white; z-index: 300;
+            display: none; flex-direction: column; justify-content: center; align-items: center;
+            text-align: center;
+        }
+        #stage-icon-container img { width: 220px; height: 220px; object-fit: contain; }
+
+        .header { padding: 20px; display: flex; justify-content: space-between; align-items: center; background: #fff; }
+        .header-controls { display: flex; align-items: center; gap: 10px; }
+
+        .btn-pause {
+            background: #f0f0f0; border: none; cursor: pointer;
+            width: 40px; height: 40px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; font-size: 1.2rem;
+        }
+
+        .timer {
+            background: var(--dark); color: white; padding: 5px 15px;
+            border-radius: 20px; font-size: 0.9rem; font-weight: bold;
+        }
+
+        .quiz-body { padding: 20px; text-align: center; flex-grow: 1; }
+        #q-text { font-size: 1.6rem; color: var(--dark); margin-bottom: 20px; font-weight: 700; }
+
+        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .option {
+            padding: 15px; border: 3px solid #f0f0f0; border-radius: 20px;
+            cursor: pointer; transition: 0.2s ease; background: white;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .option img { width: 85px; height: 85px; object-fit: contain; margin-bottom: 10px; }
+        .option:hover { border-color: var(--primary); transform: translateY(-3px); }
+        .option.selected { background: #eef2ff; border-color: var(--primary); }
+
+        /* LIVE ANIMATIONS */
+        .eat-anim { animation: bite 0.7s infinite alternate; }
+        @keyframes bite { 0% { clip-path: circle(100%); } 100% { clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%, 45% 50%); } }
+        
+        .fly-anim { animation: fly 2s forwards ease-in-out; }
+        @keyframes fly { 0% { transform: translate(-150px, 150px) rotate(10deg); } 100% { transform: translate(300px, -300px) rotate(-10deg); } }
+
+        .footer { padding: 20px; display: flex; justify-content: space-between; align-items: center; background: #fafafa; }
+        .btn-main { background: var(--primary); color: white; border: none; padding: 12px 30px; border-radius: 12px; font-weight: 600; cursor: pointer; }
+
+        #start-overlay {
+            position: absolute; inset: 0; background: var(--primary); z-index: 500;
+            display: flex; flex-direction: column; justify-content: center; align-items: center; color: white;
+        }
+    </style>
+</head>
+<body>
+
+<div class="quiz-container">
+    <div id="start-overlay">
+        <h1 style="font-size: 2.5rem; margin-bottom: 20px;">Ready to Play?</h1>
+        <button class="btn-main" style="background: white; color: var(--primary); font-size: 1.5rem;" onclick="initGame()">START GAME 🎵</button>
+    </div>
+
+    <div id="animation-stage">
+        <h1 id="stage-text" style="color:var(--primary); margin-bottom: 20px; font-size: 2rem;"></h1>
+        <div id="stage-icon-container"></div>
+    </div>
+
+    <div id="pause-screen" style="position:absolute; inset:0; background:rgba(255,255,255,0.95); z-index:100; display:none; flex-direction:column; justify-content:center; align-items:center;">
+        <h2 style="color:var(--primary); font-size: 2.5rem;">Paused</h2><br>
+        <button class="btn-main" onclick="togglePause()">Resume Game ▶</button>
+    </div>
+
+    <div id="quiz-ui">
+        <div class="header">
+            <span style="font-weight:800; color:#444;">AAQI Soft Kids</span>
+            <div class="header-controls">
+                <button class="btn-pause" onclick="togglePause()" id="p-icon">⏸</button>
+                <div class="timer" id="timer">15s</div>
+            </div>
+        </div>
+        
+        <div style="height:8px; background:#eee;"><div id="progress" style="height:100%; background:var(--success); width:0%; transition:0.4s;"></div></div>
+
+        <div class="quiz-body">
+            <h2 id="q-text">Loading...</h2>
+            <div class="options-grid" id="options-container"></div>
+        </div>
+
+        <div class="footer">
+            <span id="count" style="font-weight: bold; color: #888;">1/26</span>
+            <button class="btn-main" id="next-btn" onclick="handleNext()" disabled>Check ➔</button>
+        </div>
+    </div>
+</div>
+
+<audio id="bg-music" loop src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3"></audio>
+
+<script>
+    const pool = {
+        'A': { name: "Apple", img: "https://cdn-icons-png.flaticon.com/512/415/415733.png", anim: "eat-anim" },
+        'B': { name: "Ball", img: "https://cdn-icons-png.flaticon.com/512/3076/3076931.png", anim: "animate__bounce" }, // Fixed Ball
+        'C': { name: "Cat", img: "https://cdn-icons-png.flaticon.com/512/616/616430.png", anim: "animate__shakeY" },
+        'D': { name: "Dog", img: "https://cdn-icons-png.flaticon.com/512/616/616408.png", anim: "animate__swing" },
+        'E': { name: "Elephant", img: "https://cdn-icons-png.flaticon.com/512/616/616551.png", anim: "animate__pulse" }, // Fixed Elephant
+        'F': { name: "Fish", img: "https://cdn-icons-png.flaticon.com/512/616/616429.png", anim: "fly-anim" },
+        'G': { name: "Grapes", img: "https://cdn-icons-png.flaticon.com/512/3137/3137044.png", anim: "eat-anim" },
+        'H': { name: "Hat", img: "https://cdn-icons-png.flaticon.com/512/2387/2387799.png", anim: "animate__bounce" },
+        'I': { name: "Ice Cream", img: "https://cdn-icons-png.flaticon.com/512/938/938063.png", anim: "eat-anim" },
+        'J': { name: "Juice", img: "https://cdn-icons-png.flaticon.com/512/2442/2442001.png", anim: "animate__jello" },
+        'K': { name: "Kite", img: "https://cdn-icons-png.flaticon.com/512/1191/1191195.png", anim: "fly-anim" },
+        'L': { name: "Lion", img: "https://cdn-icons-png.flaticon.com/512/616/616412.png", anim: "animate__tada" },
+        'M': { name: "Monkey", img: "https://cdn-icons-png.flaticon.com/512/616/616424.png", anim: "animate__bounce" },
+        'N': { name: "Nest", img: "https://cdn-icons-png.flaticon.com/512/3448/3448492.png", anim: "animate__pulse" },
+        'O': { name: "Orange", img: "https://cdn-icons-png.flaticon.com/512/135/135620.png", anim: "eat-anim" },
+        'P': { name: "Parrot", img: "https://cdn-icons-png.flaticon.com/512/3069/3069172.png", anim: "fly-anim" },
+        'Q': { name: "Queen", img: "https://cdn-icons-png.flaticon.com/512/4551/4551347.png", anim: "animate__heartBeat" },
+        'R': { name: "Rabbit", img: "https://cdn-icons-png.flaticon.com/512/616/616557.png", anim: "animate__bounce" },
+        'S': { name: "Sun", img: "https://cdn-icons-png.flaticon.com/512/869/869869.png", anim: "animate__spin" },
+        'T': { name: "Tiger", img: "https://cdn-icons-png.flaticon.com/512/616/616447.png", anim: "animate__rubberBand" },
+        'U': { name: "Umbrella", img: "https://cdn-icons-png.flaticon.com/512/1423/1423694.png", anim: "animate__bounce" },
+        'V': { name: "Van", img: "https://cdn-icons-png.flaticon.com/512/2237/2237891.png", anim: "fly-anim" },
+        'W': { name: "Watch", img: "https://cdn-icons-png.flaticon.com/512/3303/3303869.png", anim: "animate__swing" },
+        'X': { name: "Xylophone", img: "https://cdn-icons-png.flaticon.com/512/1511/1511045.png", anim: "animate__shakeX" },
+        'Y': { name: "Yo-Yo", img: "https://cdn-icons-png.flaticon.com/512/1728/1728790.png", anim: "animate__bounce" },
+        'Z': { name: "Zebra", img: "https://cdn-icons-png.flaticon.com/512/616/616427.png", anim: "animate__pulse" }
+    };
+
+    let letters = Object.keys(pool);
+    let currentIndex = 0;
+    let time = 15;
+    let timerInterval;
+    let isPaused = false;
+    let selectedItem = null;
+
+    function speak(text) {
+        const msg = new SpeechSynthesisUtterance(text);
+        msg.rate = 1;
+        msg.pitch = 1.2;
+        window.speechSynthesis.speak(msg);
+    }
+
+    function initGame() {
+        document.getElementById('start-overlay').style.display = 'none';
+        document.getElementById('bg-music').volume = 0.2;
+        document.getElementById('bg-music').play();
+        loadQuestion();
+    }
+
+    function togglePause() {
+        isPaused = !isPaused;
+        document.getElementById('pause-screen').style.display = isPaused ? 'flex' : 'none';
+        document.getElementById('p-icon').innerText = isPaused ? '▶' : '⏸';
+    }
+
+    function startTimer() {
+        clearInterval(timerInterval);
+        timerInterval = setInterval(() => {
+            if (!isPaused) {
+                time--;
+                document.getElementById('timer').innerText = time + "s";
+                if (time <= 0) handleNext();
+            }
+        }, 1000);
+    }
+
+    function loadQuestion() {
+        time = 15;
+        selectedItem = null;
+        document.getElementById('next-btn').disabled = true;
+        const letter = letters[currentIndex];
+        document.getElementById('q-text').innerText = `Which one starts with ${letter}?`;
+        document.getElementById('count').innerText = `${currentIndex + 1}/26`;
+        document.getElementById('progress').style.width = `${(currentIndex / 26) * 100}%`;
+
+        const container = document.getElementById('options-container');
+        container.innerHTML = '';
+
+        let choices = [{ ...pool[letter], isCorrect: true }];
+        while (choices.length < 4) {
+            let randL = letters[Math.floor(Math.random() * 26)];
+            if (randL !== letter && !choices.find(c => c.name === pool[randL].name)) {
+                choices.push({ ...pool[randL], isCorrect: false });
+            }
+        }
+
+        choices.sort(() => Math.random() - 0.5).forEach(choice => {
+            const div = document.createElement('div');
+            div.className = 'option animate__animated animate__fadeInUp';
+            div.innerHTML = `<img src="${choice.img}"><span>${choice.name}</span>`;
+            div.onclick = () => {
+                if(isPaused) return;
+                document.querySelectorAll('.option').forEach(el => el.classList.remove('selected'));
+                div.classList.add('selected');
+                selectedItem = choice;
+                document.getElementById('next-btn').disabled = false;
+            };
+            container.appendChild(div);
+        });
+        startTimer();
+    }
+
+    function handleNext() {
+        if (selectedItem && selectedItem.isCorrect) {
+            speak(`Great Job! ${selectedItem.name}!`);
+            showAnimation(selectedItem);
+        } else {
+            speak("Try again!");
+            currentIndex++;
+            if (currentIndex < 26) loadQuestion();
+        }
+    }
+
+    function showAnimation(item) {
+        clearInterval(timerInterval);
+        const stage = document.getElementById('animation-stage');
+        const iconDiv = document.getElementById('stage-icon-container');
+        const textDiv = document.getElementById('stage-text');
+
+        stage.style.display = 'flex';
+        textDiv.innerText = `YES! IT'S ${item.name.toUpperCase()}!`;
+        
+        let anim = item.anim;
+        if(anim.includes('animate__')) anim += " animate__animated animate__infinite";
+        iconDiv.innerHTML = `<img src="${item.img}" class="${anim}">`;
+
+        setTimeout(() => {
+            stage.style.display = 'none';
+            currentIndex++;
+            if (currentIndex < 26) loadQuestion();
+            else alert("Game Over! Amazing!");
+        }, 2500);
+    }
+</script>
+</body>
+</html>
