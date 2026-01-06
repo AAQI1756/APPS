@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Color Match Explorer | AAQI Soft Solutions</title>
+    <style>
+        :root {
+            --primary: #6C63FF;
+            --success: #00D166;
+            --danger: #FF4757;
+            --dark: #2D3436;
+            --glass: rgba(255, 255, 255, 0.95);
+        }
+
+        * { box-sizing: border-box; font-family: 'Poppins', sans-serif; margin: 0; padding: 0; }
+
+        body {
+            background: linear-gradient(-45deg, #FF9A9E, #FAD0C4, #A1C4FD, #C2E9FB);
+            background-size: 400% 400%;
+            animation: moveGradient 15s ease infinite;
+            display: flex; flex-direction: column; align-items: center;
+            min-height: 100vh; padding: 20px; 
+            overflow-y: auto;
+        }
+
+        @keyframes moveGradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .quiz-container {
+            background: var(--glass);
+            width: 100%; max-width: 450px;
+            border-radius: 30px; box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+            overflow: hidden; position: relative;
+            margin-bottom: 20px;
+        }
+
+        .header {
+            padding: 15px 20px; display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 1px solid #eee; background: #fff;
+        }
+
+        .header-right { display: flex; align-items: center; gap: 10px; }
+
+        .btn-pause {
+            background: #f0f2f5; border: none; width: 35px; height: 35px;
+            border-radius: 50%; cursor: pointer; display: flex;
+            align-items: center; justify-content: center; font-size: 0.9rem;
+            transition: 0.2s;
+        }
+
+        .btn-pause:hover { background: #e2e5e9; }
+
+        .timer {
+            background: var(--dark); color: white; padding: 4px 12px;
+            border-radius: 20px; font-size: 0.85rem; font-weight: bold; min-width: 55px; text-align: center;
+        }
+
+        .quiz-body { padding: 20px; text-align: center; transition: 0.3s; }
+        
+        /* Pause Overlay inside the container */
+        #pause-overlay {
+            position: absolute; inset: 0; background: rgba(255,255,255,0.98);
+            z-index: 100; display: none; flex-direction: column;
+            justify-content: center; align-items: center;
+        }
+
+        .color-box {
+            height: 80px; width: 80px; border-radius: 20px; margin: 0 auto 15px;
+            box-shadow: 0 8px 15px rgba(0,0,0,0.1); border: 4px solid #fff;
+        }
+
+        #q-text { font-size: 1.4rem; color: var(--dark); margin-bottom: 20px; font-weight: 700; }
+
+        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+
+        .option {
+            padding: 15px; border: 4px solid #f0f0f0; border-radius: 25px;
+            cursor: pointer; transition: 0.2s ease; background: white;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            min-height: 120px;
+        }
+
+        .option.correct-glow { border-color: var(--success); background: #e6ffed; transform: scale(1.05); }
+        .option.wrong-glow { border-color: var(--danger); background: #fff5f5; }
+
+        .color-circle {
+            width: 50px; height: 50px; border-radius: 50%; margin-bottom: 10px;
+            box-shadow: inset 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .option span { font-weight: 800; color: #444; font-size: 1.1rem; }
+
+        #result-overlay {
+            position: absolute; inset: 0; background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(12px); display: none; justify-content: center; align-items: center; z-index: 200;
+        }
+
+        .result-card {
+            background: white; width: 85%; padding: 35px 25px;
+            border-radius: 25px; text-align: center;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+            transform: scale(0.8); opacity: 0; transition: 0.4s;
+        }
+
+        .result-card.show { transform: scale(1); opacity: 1; }
+
+        .score-circle {
+            width: 100px; height: 100px; background: var(--success);
+            color: white; border-radius: 50%; display: flex;
+            align-items: center; justify-content: center;
+            margin: 20px auto; font-size: 2rem; font-weight: bold;
+        }
+
+        .footer {
+            padding: 15px 20px; display: flex; justify-content: center;
+            background: #fafafa; border-top: 1px solid #eee;
+        }
+
+        .btn-main {
+            background: var(--primary); color: white; border: none;
+            padding: 12px 25px; border-radius: 15px; font-weight: 600; cursor: pointer;
+        }
+
+        .copyright { padding: 10px 0 30px; color: white; font-size: 0.85rem; text-align: center; }
+    </style>
+</head>
+<body>
+
+<div class="quiz-container">
+    <div id="pause-overlay">
+        <h2 style="color:var(--primary); margin-bottom:20px;">Game Paused</h2>
+        <button class="btn-main" onclick="togglePause()" style="width:180px;">Resume ▶</button>
+    </div>
+
+    <div id="quiz-ui">
+        <div class="header">
+            <span style="font-weight:800; color:#444;">AAQI Soft</span>
+            <div class="header-right">
+                <button class="btn-pause" onclick="togglePause()" id="pause-btn">⏸</button>
+                <div class="timer" id="timer">15s</div>
+            </div>
+        </div>
+        
+        <div style="height:6px; background:#eee;"><div id="progress" style="height:100%; background:var(--success); width:0%; transition:0.4s;"></div></div>
+
+        <div class="quiz-body" id="quiz-body-content">
+            <div id="target-color-box" class="color-box"></div>
+            <h2 id="q-text">Find the color!</h2>
+            <div class="options-grid" id="options-container"></div>
+        </div>
+
+        <div class="footer">
+            <span id="count" style="font-size:0.9rem; color:#888; font-weight:bold;">1/10</span>
+        </div>
+    </div>
+
+    <div id="result-overlay">
+        <div class="result-card" id="result-card">
+            <h2>Great Job!</h2>
+            <div class="score-circle" id="final-score">0/10</div>
+            <p style="color:#666; margin-bottom:20px;">You are a Color Explorer!</p>
+            <button class="btn-main" onclick="resetQuiz()" style="width:100%">Play Again</button>
+        </div>
+    </div>
+</div>
+
+<div class="copyright">All rights reserved © AAQI Soft Solutions.</div>
+
+<script>
+    const colorPool = [
+        { name: "Red", hex: "#FF4757" }, { name: "Blue", hex: "#2E86DE" },
+        { name: "Green", hex: "#2ED573" }, { name: "Yellow", hex: "#ECCC68" },
+        { name: "Orange", hex: "#FFA502" }, { name: "Purple", hex: "#8E44AD" },
+        { name: "Pink", hex: "#FF9FF3" }, { name: "Brown", hex: "#A0522D" },
+        { name: "Cyan", hex: "#00D2D3" }, { name: "Dark", hex: "#2F3542" }
+    ];
+
+    let current = 0, score = 0, time = 15, timer, canClick = true, isPaused = false;
+    let quizData = [];
+
+    function togglePause() {
+        if(current >= 10) return; // Can't pause at result screen
+        isPaused = !isPaused;
+        const overlay = document.getElementById('pause-overlay');
+        const bodyContent = document.getElementById('quiz-body-content');
+        
+        if(isPaused) {
+            overlay.style.display = 'flex';
+            bodyContent.style.opacity = '0.1';
+            document.getElementById('pause-btn').innerText = '▶';
+        } else {
+            overlay.style.display = 'none';
+            bodyContent.style.opacity = '1';
+            document.getElementById('pause-btn').innerText = '⏸';
+        }
+    }
+
+    function prepareQuiz() {
+        quizData = [];
+        let shuffled = [...colorPool].sort(() => Math.random() - 0.5);
+        shuffled.forEach(color => {
+            let wrongs = [];
+            while(wrongs.length < 3) {
+                let r = colorPool[Math.floor(Math.random() * colorPool.length)];
+                if(r.name !== color.name && !wrongs.find(w => w.name === r.name)) wrongs.push(r);
+            }
+            quizData.push({
+                correct: color,
+                options: [{ ...color, isCorrect: true }, ...wrongs.map(w => ({...w, isCorrect: false}))].sort(() => Math.random() - 0.5)
+            });
+        });
+    }
+
+    function startTimer() {
+        clearInterval(timer);
+        timer = setInterval(() => {
+            if (!isPaused && time > 0) {
+                time--;
+                document.getElementById('timer').innerText = time + "s";
+            } else if (!isPaused && time <= 0) {
+                handleSelection(null);
+            }
+        }, 1000);
+    }
+
+    function loadQ() {
+        canClick = true;
+        time = 15;
+        document.getElementById('timer').innerText = "15s";
+        
+        const q = quizData[current];
+        document.getElementById('target-color-box').style.backgroundColor = q.correct.hex;
+        document.getElementById('q-text').innerText = `Where is ${q.correct.name}?`;
+        document.getElementById('count').innerText = `${current + 1} of 10`;
+        document.getElementById('progress').style.width = `${(current / 10) * 100}%`;
+        
+        const container = document.getElementById('options-container');
+        container.innerHTML = '';
+        
+        q.options.forEach((opt) => {
+            const b = document.createElement('div');
+            b.className = 'option';
+            b.innerHTML = `<div class="color-circle" style="background-color: ${opt.hex}"></div><span>${opt.name}</span>`;
+            b.onclick = () => handleSelection(b, opt.isCorrect);
+            container.appendChild(b);
+        });
+        startTimer();
+    }
+
+    function handleSelection(element, isCorrect) {
+        if(!canClick || isPaused) return;
+        canClick = false;
+        clearInterval(timer);
+
+        if(element) {
+            if(isCorrect) {
+                score++;
+                element.classList.add('correct-glow');
+            } else {
+                element.classList.add('wrong-glow');
+            }
+        }
+
+        setTimeout(() => {
+            current++;
+            if (current < 10) loadQ(); else showResult();
+        }, 600);
+    }
+
+    function showResult() {
+        clearInterval(timer);
+        const overlay = document.getElementById('result-overlay');
+        overlay.style.display = 'flex';
+        document.getElementById('final-score').innerText = `${score}/10`;
+        setTimeout(() => { document.getElementById('result-card').classList.add('show'); }, 100);
+    }
+
+    function resetQuiz() {
+        current = 0; score = 0; isPaused = false;
+        document.getElementById('pause-overlay').style.display = 'none';
+        document.getElementById('quiz-body-content').style.opacity = '1';
+        document.getElementById('result-card').classList.remove('show');
+        setTimeout(() => { 
+            document.getElementById('result-overlay').style.display = 'none';
+            prepareQuiz();
+            loadQ(); 
+        }, 300);
+    }
+
+    prepareQuiz();
+    loadQ();
+</script>
+</body>
+</html>
